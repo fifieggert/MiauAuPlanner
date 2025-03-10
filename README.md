@@ -7,12 +7,49 @@ Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para gara
 - Graziela Torres
 - Sophia Eggert Freire da Rocha
 
-## Tecnologias Utilizadas
+## Requisitos funcionais 
 
-- **React.js**
-- **TypeScript**
-- **NodeJS**
-- **MySQL**
+- RF01: O sistema deve ter um cadastro para pets
+- RF02: O sistema deve ter um histórico de cuidados
+- RF03: O sistema deve permitir editar os cadastros
+- RF04: O sistema deve criar lembretes com próximos eventos 
+- RF05: O sistema deve manter um registro de vacinas 
+
+## Requisitos não funcionais 
+
+- RNF01: O sistema deve rodar em linux
+- RNF02: O sistema deve ser capaz de suportar 1.000 usuários simultâneos sem interferências 
+- RNF03: O sistema deve ter um tempo de resposta de 0,5 segundos.
+
+## Arquitetura 
+
+Clean Architecture + MVC + Arquitetura monolítica 
+https://danvitoriano.medium.com/clean-architecture-a35688308e29
+
+## Camadas principais:
+ - Apresentação (Front-end - React.js): Lida com a UI/UX, consumindo a API via REST.
+ - Aplicação (Back-end - Node.js + Express.js): Contém os casos de uso (regras de negócio) e manipulação de dados.
+ - Domínio: Modelos de dados e entidades principais (Aluno, Aula, Professor).
+ - Infraestrutura (MySQL, ORM - Prisma): Gestão do banco de dados e persistência.
+
+## Tecnologias
+
+## Back-end (Node.js)
+ - Framework: Express.js
+ - Banco de Dados: MySQL (ORM: Prisma)
+ - Autenticação: JWT
+
+## Front-end (React.js)
+ - Biblioteca UI: https://ui.shadcn.com/
+ - Gerenciamento de Estado: Context API
+ - Comunicação com API: Axios
+ - Autenticação: Context + JWT Storage (LocalStorage)
+
+
+## Board de atividades
+https://trello.com/invite/b/67bcf463ecf24beaec769b41/ATTI839176f597a349ef761a366be09729fe79957083/miauauplanner-desenvolviment
+
+
 
 ## Funcionalidades Principais
 
