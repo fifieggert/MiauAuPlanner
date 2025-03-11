@@ -9,11 +9,14 @@ Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para gara
 
 ## Requisitos funcionais 
 
-- RF01: O sistema deve ter um cadastro para pets
-- RF02: O sistema deve ter um histórico de cuidados
-- RF03: O sistema deve permitir editar os cadastros
-- RF04: O sistema deve criar lembretes com próximos eventos 
-- RF05: O sistema deve manter um registro de vacinas 
+- RF01: O sistema deve ter um cadastro de usuários 
+- RF02: O sistema deve permitir que cada usuário possa ter mais de um pet
+- RF03: O sistema deve ter uma tabela de tipo de animais 
+- RF04: O sistema deve ter um cadastro para pets
+- RF05: O sistema deve ter um histórico de cuidados(banho, consulta, vacinas)
+- RF06: O sistema deve permitir editar os cadastros
+- RF07: O sistema deve criar lembretes com próximos eventos(banho, consulta, vacinas)
+- RF08: O sistema deve manter um registro de vacinas
 
 ## Requisitos não funcionais 
 
