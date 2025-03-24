@@ -7,22 +7,54 @@ Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para gara
 - Graziela Torres
 - Sophia Eggert Freire da Rocha
 
-## Requisitos funcionais 
+## Requisitos Funcionais
 
-- RF01: O sistema deve ter um cadastro de usuários 
-- RF02: O sistema deve permitir que cada usuário possa ter mais de um pet
-- RF03: O sistema deve ter uma tabela de tipo de animais 
-- RF04: O sistema deve ter um cadastro para pets
-- RF05: O sistema deve ter um histórico de cuidados(banho, consulta, vacinas)
-- RF06: O sistema deve permitir editar os cadastros
-- RF07: O sistema deve criar lembretes com próximos eventos(banho, consulta, vacinas)
-- RF08: O sistema deve manter um registro de vacinas
+- **RF01: Cadastro e Autenticação de Usuários**  
+  - Permitir o cadastro de usuários com informações básicas (nome, e-mail e senha).  
+  - Incluir validação de e-mail e requisitos mínimos de segurança na senha.  
+  - Disponibilizar login seguro e opção de recuperação de senha.
 
-## Requisitos não funcionais 
+- **RF02: Gerenciamento de Pets**  
+  - Cada usuário pode cadastrar múltiplos pets.  
+  - Incluir cadastro dos pets com informações como nome, idade, espécie, raça (opcional) e características (peso, altura, observações).
 
-- RNF01: O sistema deve rodar em linux
-- RNF02: O sistema deve ser capaz de suportar 1.000 usuários simultâneos sem interferências 
-- RNF03: O sistema deve ter um tempo de resposta de 0,5 segundos.
+- **RF03: Tabela/Lista de Tipos de Animais**  
+  - Disponibilizar uma lista pré-definida de tipos de animais (ex.: cão, gato, pássaro) para facilitar a categorização.  
+  - Permitir que essa lista seja gerenciada de forma estática ou via administração, conforme a necessidade.
+
+- **RF04: Histórico de Cuidados dos Pets**  
+  - Registrar o histórico de cuidados realizados, como banhos, consultas veterinárias e vacinas.  
+  - Cada registro deve conter data, descrição do cuidado e observações, se necessário.
+
+- **RF05: Edição e Exclusão de Cadastros**  
+  - Permitir a edição e exclusão dos cadastros de usuários e pets, garantindo que as alterações sejam refletidas no histórico.
+
+- **RF06: Criação de Lembretes**  
+  - Permitir a criação de lembretes para eventos futuros (banhos, consultas e vacinas).  
+  - Disponibilizar notificações via e-mail ou alertas internos, conforme configurado pelo usuário.
+
+- **RF07: Registro Detalhado de Vacinas**  
+  - Manter um registro detalhado das vacinas aplicadas, com data de aplicação, dose e data prevista para reforço (quando aplicável).
+
+- **RF08: Dashboard e Visualização Resumida**  
+  - Oferecer um dashboard onde o usuário possa visualizar um resumo das informações, como próximos lembretes, histórico recente e dados dos pets.
+
+## Requisitos Não Funcionais
+
+- **RNF01: Compatibilidade e Usabilidade**  
+  - Ser compatível com os navegadores modernos (Chrome, Firefox, Edge e Safari).  
+  - Ter uma interface responsiva para uso em dispositivos móveis e desktops.
+
+- **RNF02: Performance e Escalabilidade**  
+  - Suportar até 5 usuários simultâneos sem degradação de desempenho.  
+  - As operações principais (login, cadastro, busca e atualização de dados) devem ter tempo de resposta inferior a 1 segundo em conexões padrão.
+
+- **RNF03: Segurança e Privacidade**  
+  - Armazenar os dados de forma segura, utilizando criptografia para senhas e conexões HTTPS para transmissão dos dados.  
+  - Implementar medidas de segurança contra ataques comuns, como injeção de SQL e XSS.
+
+- **RNF04: Manutenção e Atualizações**  
+  - Utilizar ferramentas de versionamento e deploy automatizado.
 
 ## Arquitetura 
 
