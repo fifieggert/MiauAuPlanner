@@ -3,7 +3,7 @@ import UserRepository from "../repositories/userRepositories";
 
 const userController = {
   create: (req: Request, res: Response) => {
-    const { nome, telefone, email, cpf } = req.body; 
+    const { nome, telefone, email, cpf } = req.body;
     UserRepository.create(nome, telefone, cpf, email, (err, result) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
       res.status(201).json({ message: "Usuário criado com sucesso", result });
@@ -34,12 +34,11 @@ const userController = {
 
     UserRepository.update(ID_usuario, nome, telefone, email, (err, result) => {
       if (err) {
-          console.error("Erro no update:", err);
-          return res.status(500).json({ error: "Erro no servidor", details: err });
+        console.error("Erro no update:", err);
+        return res.status(500).json({ error: "Erro no servidor", details: err });
       }
       res.status(200).json({ message: "Usuário atualizado com sucesso", result });
-  });
-  
+    });
   },
 
   delete: (req: Request, res: Response) => {

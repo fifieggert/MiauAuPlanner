@@ -4,9 +4,9 @@
   "description": "O **MiauAuPlanner** é uma aplicação web desenvolvida dentro da disciplina **Programação Web** na instituição **CATÓLICA DE SANTA CATARINA** para ajudar tutores a gerenciar os cuidados diários dos seus pets de forma prática e eficiente. \r Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para garantir que seu animal de estimação receba os melhores cuidados, sempre no momento certo. 🐶🐱",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/app.ts", 
-    "build": "tsc", 
-    "start": "node dist/app.js" 
+    "dev": "ts-node src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
