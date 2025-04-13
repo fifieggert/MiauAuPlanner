@@ -1,4 +1,4 @@
-export class Historico{
+export class Compromisso{
     id?: number;
     data_compromissos: any;
     id_animal: number;

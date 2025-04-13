@@ -1,4 +1,4 @@
-import { Historico } from "../models/compromisso";
+import { Historico } from "../models/historico";
 import connection from "../config/bd";
 
 const HistoricoRepositorie = {
