@@ -1,0 +1,98 @@
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.logo-container {
+  height: 64px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.ant-menu-item {
+  height: 48px !important;
+  line-height: 48px !important;
+  margin: 8px 16px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-menu-item:hover {
+  background-color: #F1F8E9 !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #F1F8E9 !important;
+  color: #4CAF50 !important;
+}
+
+.ant-menu-item-selected::after {
+  border-right: 3px solid #4CAF50 !important;
+}
+
+.ant-menu-item .anticon {
+  font-size: 18px !important;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ant-layout-sider {
+    position: fixed;
+    z-index: 1000;
+    height: 100%;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .ant-layout-content {
+    margin-left: 0 !important;
+  }
+
+  .ant-card {
+    margin-bottom: 16px;
+  }
+
+  .logo-container {
+    height: 56px;
+    padding: 12px;
+  }
+
+  .ant-menu-item {
+    height: 44px !important;
+    line-height: 44px !important;
+    margin: 6px 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ant-layout-header {
+    padding: 0 16px !important;
+  }
+
+  .ant-layout-content {
+    margin: 16px !important;
+    padding: 16px !important;
+  }
+
+  .ant-card {
+    margin-bottom: 12px;
+  }
+
+  .logo-container {
+    height: 48px;
+    padding: 8px;
+  }
+
+  .ant-menu-item {
+    height: 40px !important;
+    line-height: 40px !important;
+    margin: 4px 8px !important;
+  }
+
+  .ant-menu-item .anticon {
+    font-size: 16px !important;
+  }
+} 
