@@ -5,7 +5,7 @@ import especieRouter from './routes/especieRoutes'
 import alergiaRouter from './routes/alergiaRoutes'
 import historicoRouter from './routes/historicoRoutes'
 import compromissoRouter from './routes/compromissosRoutes'
-import vacinaRouter from './routes/vacinasRoutes'
+
 
 const app = express();
 
@@ -17,9 +17,8 @@ app.use(especieRouter);
 app.use(alergiaRouter);
 app.use(historicoRouter);
 app.use(compromissoRouter);
-app.use(vacinaRouter);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
