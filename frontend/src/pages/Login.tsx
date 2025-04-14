@@ -28,8 +28,9 @@ const Login: React.FC = () => {
   return (
     <div className="login-container">
       <Card className="login-card">
-        <Title level={2} style={{ textAlign: 'center', marginBottom: 30 }}>
-          MiauAuPlanner
+        <img src="src/assets/pet-house.png" alt="Logo" className="logo" />
+        <Title level={2} style={{ textAlign: 'center', marginBottom: 30, color: '#4CAF50' }}>
+          Miau&Au Planner
         </Title>
         <Form
           name="login"

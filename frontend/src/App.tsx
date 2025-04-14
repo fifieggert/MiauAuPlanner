@@ -14,7 +14,14 @@ import 'antd/dist/reset.css';
 
 const App: React.FC = () => {
   return (
-    <ConfigProvider locale={ptBR}>
+    <ConfigProvider
+      locale={ptBR}
+      theme={{
+        token: {
+          colorPrimary: '#4CAF50',
+        },
+      }}
+    >
       <AuthProvider>
         <Router>
           <Routes>

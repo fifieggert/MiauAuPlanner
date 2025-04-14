@@ -8,7 +8,7 @@ import './Layout.css';
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 
-const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AppLayout: React.FC<{ children: React.ReactNode }> = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 

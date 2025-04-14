@@ -15,6 +15,13 @@
   border-radius: 8px;
 }
 
+.logo {
+  width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .login-container {
