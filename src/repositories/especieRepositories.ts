@@ -17,10 +17,10 @@ const EspecieRepositorie = {
         });
     },
     findById: (ID_especie: any, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'SELECT FROM especie WHERE ID_especie = ?';
+        const query = 'SELECT * FROM especie WHERE ID_especie = ?';
         connection.query(query, [ID_especie], (err: Error | null, results?: any) => {
-            if (err) return callback(err);
-            callback(null, results);
+            if (err) return callback (err);
+            callback (null, results);
         });
     },
     update: (ID_especie: any, especie: string, callback: (err: Error | null, results?: any) => void) => {

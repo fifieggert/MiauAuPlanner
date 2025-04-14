@@ -3,8 +3,8 @@ import AlergiaRepositorie from "../repositories/alergiaRepositories";
 
 const alergiaController = {
   create: (req: Request, res: Response) => {
-    const { animal_ID, descricao } = req.body;
-    AlergiaRepositorie.create(animal_ID, descricao, (err, result) => {
+    const { ID_animal, descricao } = req.body;
+    AlergiaRepositorie.create(ID_animal, descricao, (err, result) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
       res.status(201).json({ message: "Alergia criada com sucesso", result });
     });
@@ -27,9 +27,9 @@ const alergiaController = {
   },
 
   update: (req: Request, res: Response) => {
-    const ID_alergia = Number(req.params.ID_especie);
+    const ID_alergia = (req.params.ID_alergia);
     const { descricao } = req.body;
-    console.log("ID_especie recebido:", ID_alergia);
+    console.log("ID_alergia recebido:", ID_alergia);
     console.log("Dados recebidos:", { descricao });
 
     AlergiaRepositorie.update(ID_alergia, descricao, (err, result) => {

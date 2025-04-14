@@ -3,7 +3,7 @@ import connection from "../config/bd";
 
 const HistoricoRepositorie = {
     create: (data_historico: any, ID_animal: number, observacoes: string, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'INSERT INTO historico (data_historico, ID_animal, obrservacoes) values (?, ?, ?)';
+        const query = 'INSERT INTO historico (data_historico, ID_animal, observacoes) values (?, ?, ?)';
         connection.query(query, [data_historico, ID_animal, observacoes], (err: Error | null, results?: any) => {
             if (err) return callback (err);
             callback (null, results); 
@@ -17,7 +17,7 @@ const HistoricoRepositorie = {
         });
     },
     findById: (ID_historico: any, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'SELECT FROM historico WHERE ID_historico = ?';
+        const query = 'SELECT * FROM historico WHERE ID_historico = ?';
         connection.query(query, [ID_historico], (err: Error | null, results?: any) => {
             if (err) return callback (err);
             callback (null, results);
@@ -33,7 +33,7 @@ const HistoricoRepositorie = {
         });
     },
     delete: (ID_historico: any, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'DELETE FROM vacinas WHERE ID_vacina = ?';
+        const query = 'DELETE FROM historico WHERE ID_historico = ?';
         connection.query(query, [ID_historico], (err: Error | null, results?: any) => {
             if (err) return callback (err);
             callback (null, results);

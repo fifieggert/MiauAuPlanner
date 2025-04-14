@@ -2,9 +2,9 @@ import { Compromisso } from "../models/compromisso";
 import connection from "../config/bd";
 
 const CompromissoRepositorie = {
-    create: (data_compromissos: any, id_animal: number, observacoes: string, id_vacina: number, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'INSERT INTO compromissos (data_compromissos, id_animal, observacoes, id_vacina) VALUES (?, ?, ?, ?)';
-        connection.query(query, [data_compromissos, id_animal, observacoes, id_vacina], (err: Error | null, results?: any) =>{
+    create: (data_compromissos: any, ID_animal: number, observacoes: string, ID_vacina: number, callback: (err: Error | null, results?: any) => void) => {
+        const query = 'INSERT INTO compromissos (data_compromissos, ID_animal, observacoes, ID_vacina) VALUES (?, ?, ?, ?)';
+        connection.query(query, [data_compromissos, ID_animal, observacoes, ID_vacina], (err: Error | null, results?: any) =>{
             if(err) return callback(err);
             callback(null, results);
         });
@@ -17,7 +17,7 @@ const CompromissoRepositorie = {
         });
     },
     findById: (ID_compromissos: any, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'SELECT FROM compromissos WHERE ID_compromissos = ?';
+        const query = 'SELECT * FROM compromissos WHERE ID_compromissos = ?';
         connection.query(query, [ID_compromissos], (err: Error | null, results?: any) => {
             if (err) return callback (err);
             callback(null, results);

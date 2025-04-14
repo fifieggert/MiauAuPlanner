@@ -18,8 +18,8 @@ const especieController = {
   },
 
   findById: (req: Request, res: Response) => {
-    const { id_especie } = req.params;
-    EspecieRepositorie.findById((id_especie), (err, especie) => {
+    const { ID_especie } = req.params;
+    EspecieRepositorie.findById((ID_especie), (err, especie) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
       if (!especie) return res.status(404).json({ error: "Espécie não encontrada" });
       res.status(200).json(especie);
@@ -27,7 +27,7 @@ const especieController = {
   },
 
   update: (req: Request, res: Response) => {
-    const ID_especie = Number(req.params.ID_especie);
+    const ID_especie = (req.params.ID_especie);
     const { especie } = req.body;
     console.log("ID_especie recebido:", ID_especie);
     console.log("Dados recebidos:", { especie });
@@ -46,7 +46,7 @@ const especieController = {
     console.log(ID_especie, 'teste')
     EspecieRepositorie.delete(ID_especie, (err, result) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
-      res.status(200).json({ message: "Usuário deletado com sucesso", result });
+      res.status(200).json({ message: "Espécie deletada com sucesso", result });
     });
   },
 };

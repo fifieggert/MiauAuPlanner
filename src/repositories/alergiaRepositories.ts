@@ -2,9 +2,9 @@ import { Alergia } from "../models/alergia";
 import connection from "../config/bd";
 
 const AlergiaRepositorie = {
-    create: (animal_ID: number, descricao: string, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'INSERT INTO alergia (animal_ID, descricao) values (?, ?)';
-        connection.query(query, [animal_ID, descricao], (err: Error | null, results?: any) => {
+    create: (ID_animal: number, descricao: string, callback: (err: Error | null, results?: any) => void) => {
+        const query = 'INSERT INTO alergia (ID_animal, descricao) values (?, ?)';
+        connection.query(query, [ID_animal, descricao], (err: Error | null, results?: any) => {
             if (err) return callback (err);
             callback (null, results); 
         });
@@ -17,7 +17,7 @@ const AlergiaRepositorie = {
         });
     },
     findById: (ID_alergia: any, callback: (err: Error | null, results?: any) => void) => {
-        const query = 'SELECT FROM alergia WHERE ID_alergia = ?';
+        const query = 'SELECT * FROM alergia WHERE ID_alergia = ?';
         connection.query(query, [ID_alergia], (err: Error | null, results?: any) => {
             if (err) return callback (err);
             callback (null, results);
