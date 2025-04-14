@@ -150,7 +150,7 @@ const Pets: React.FC = () => {
     <div>
       <Card>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <Title level={4} style={{ margin: 0 }}>Meus Pets</Title>
+          <Title level={4} style={{ margin: 0 }}>Pets</Title>
           <Button type="primary" icon={<PlusOutlined />} onClick={handleAddPet}>
             Adicionar Pet
           </Button>

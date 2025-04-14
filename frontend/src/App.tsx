@@ -7,6 +7,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Pets from './pages/Pets';
+import Users from './pages/Users';
+import Appointments from './pages/Appointments';
 import AppLayout from './components/Layout';
 import 'antd/dist/reset.css';
 
@@ -18,9 +20,11 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route element={<AppLayout />}>
+            <Route element={<AppLayout children={undefined} />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/pets" element={<Pets />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/appointments" element={<Appointments />} />
             </Route>
           </Routes>
         </Router>

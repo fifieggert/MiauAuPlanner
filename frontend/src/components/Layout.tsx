@@ -57,25 +57,27 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </Menu.Item>
           <Menu.Item 
             key="2" 
-            icon={<UserOutlined style={{ color: '#2196F3' }} />}
-            style={{ margin: '8px 0' }}
-          >
-            Perfil
-          </Menu.Item>
-          <Menu.Item 
-            key="3" 
             icon={<CalendarOutlined style={{ color: '#FFC107' }} />}
             style={{ margin: '8px 0' }}
+            onClick={() => navigate('/appointments')}
           >
             Agendamentos
           </Menu.Item>
           <Menu.Item 
-            key="4" 
+            key="3" 
             icon={<TeamOutlined style={{ color: '#81C784' }} />}
             style={{ margin: '8px 0' }}
             onClick={() => navigate('/pets')}
           >
             Pets
+          </Menu.Item>
+          <Menu.Item 
+            key="4" 
+            icon={<UserOutlined style={{ color: '#2196F3' }} />}
+            style={{ margin: '8px 0' }}
+            onClick={() => navigate('/users')}
+          >
+            Usuários
           </Menu.Item>
           <Menu.Item 
             key="5" 
