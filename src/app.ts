@@ -1,13 +1,17 @@
-import  express, {Request, Response}  from 'express'
-import userRouter from './routes/userRoutes'
-import animalRouter from './routes/animalRoutes'
-import especieRouter from './routes/especieRoutes'
-import alergiaRouter from './routes/alergiaRoutes'
-import historicoRouter from './routes/historicoRoutes'
-import compromissoRouter from './routes/compromissosRoutes'
-import vacinaRouter from './routes/vacinasRoutes'
+import express from 'express';
+import setupSwagger from '../swagger';
+
+import userRouter from './routes/userRoutes';
+import animalRouter from './routes/animalRoutes';
+import especieRouter from './routes/especieRoutes';
+import alergiaRouter from './routes/alergiaRoutes';
+import historicoRouter from './routes/historicoRoutes';
+import compromissoRouter from './routes/compromissosRoutes';
+import vacinaRouter from './routes/vacinasRoutes';
 
 const app = express();
+
+setupSwagger(app);
 
 app.use(express.json());
 

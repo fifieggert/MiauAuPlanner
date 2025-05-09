@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Row, Col } from 'antd';
-import dayjs from 'dayjs';
+import React, { useState, useEffect } from "react";
+import { Card, Row, Col } from "antd";
+import dayjs from "dayjs";
 
 interface Appointment {
   id: string;
@@ -31,45 +31,48 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     // Fetch appointments from localStorage
-    const savedAppointments = localStorage.getItem('appointments');
+    const savedAppointments = localStorage.getItem("appointments");
     if (savedAppointments) {
       setAppointments(JSON.parse(savedAppointments));
     }
 
     // Fetch pets from localStorage
-    const savedPets = localStorage.getItem('pets');
+    const savedPets = localStorage.getItem("pets");
     if (savedPets) {
       setPets(JSON.parse(savedPets));
     }
   }, []);
 
   // Get today's appointments
-  const todayAppointments = appointments.filter(appointment => {
+  const todayAppointments = appointments.filter((appointment) => {
     const appointmentDate = dayjs(appointment.date);
     const today = dayjs();
-    return appointmentDate.isSame(today, 'day');
+    return appointmentDate.isSame(today, "day");
   });
 
   // Get upcoming appointments (excluding today)
-  const upcomingAppointments = appointments.filter(appointment => {
-    const appointmentDate = dayjs(appointment.date);
-    const today = dayjs();
-    return appointmentDate.isAfter(today, 'day');
-  }).slice(0, 3); // Show only next 3 appointments
+  const upcomingAppointments = appointments
+    .filter((appointment) => {
+      const appointmentDate = dayjs(appointment.date);
+      const today = dayjs();
+      return appointmentDate.isAfter(today, "day");
+    })
+    .slice(0, 3); // Show only next 3 appointments
 
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={12} md={8} lg={6}>
-        <Card 
-          title="Agendamentos Hoje" 
+        <Card
+          title="Compromissos de Hoje"
           bordered={false}
-          style={{ background: '#FFFFFF' }}
+          style={{ background: "#FFFFFF" }}
         >
           {todayAppointments.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              {todayAppointments.map(appointment => (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {todayAppointments.map((appointment) => (
                 <li key={appointment.id}>
-                  {appointment.time} - {appointment.pet.name} ({appointment.service})
+                  {appointment.time} - {appointment.pet.name} (
+                  {appointment.service})
                 </li>
               ))}
             </ul>
@@ -79,25 +82,26 @@ const Dashboard: React.FC = () => {
         </Card>
       </Col>
       <Col xs={24} sm={12} md={8} lg={6}>
-        <Card 
-          title="Pets Cadastrados" 
+        <Card
+          title="Pets Cadastrados"
           bordered={false}
-          style={{ background: '#FFFFFF' }}
+          style={{ background: "#FFFFFF" }}
         >
           <p>{pets.length} pets cadastrados</p>
         </Card>
       </Col>
       <Col xs={24} sm={12} md={8} lg={6}>
-        <Card 
-          title="Próximos Agendamentos" 
+        <Card
+          title="Próximos compromissos"
           bordered={false}
-          style={{ background: '#FFFFFF' }}
+          style={{ background: "#FFFFFF" }}
         >
           {upcomingAppointments.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              {upcomingAppointments.map(appointment => (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {upcomingAppointments.map((appointment) => (
                 <li key={appointment.id}>
-                  {dayjs(appointment.date).format('DD/MM')} - {appointment.time} - {appointment.pet.name}
+                  {dayjs(appointment.date).format("DD/MM")} - {appointment.time}{" "}
+                  - {appointment.pet.name}
                 </li>
               ))}
             </ul>
@@ -110,4 +114,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

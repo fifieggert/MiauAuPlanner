@@ -1,6 +1,52 @@
 import { Request, Response } from "express";
 import CompromissoRepositorie from "../repositories/compromissosRepositories";
 
+/**
+ * @swagger
+ * /compromisso:
+ *   post:
+ *     summary: Cria um novo compromisso
+ *     description: Endpoint para criar um novo compromisso no sistema
+ *     tags:  
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               data_compromissos:
+ *                 type: string
+ *               ID_animal:
+ *                 type: number
+ *               obrservacoes:
+ *                 type: string
+ *               ID_vacina:
+ *                 type: number 
+ *               ID_usuario:
+ *                 type: number
+ *               ID_veterinario:
+ *                 type: number
+ *               ID_clinica:
+ *                 type: number
+ *               ID_animal:
+ *                 type: number 
+ *               ID_vacina:
+ *                 type: number
+ *               ID_usuario:
+ *                 type: number
+ *               ID_veterinario:
+ *                 type: number
+ *               ID_clinica:
+ *                 type: number
+ *               ID_animal:
+ *                 type: number
+ *               ID_vacina:
+ *                 type: number
+ *               ID_usuario:
+ *                 type: number 
+ */ 
+
 const CompromissoController = {
     create: (req: Request, res: Response) => {
         const {data_compromissos, ID_animal, obrservacoes, ID_vacina} = req.body;

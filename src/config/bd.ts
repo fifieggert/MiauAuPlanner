@@ -3,7 +3,7 @@ import mysql from "mysql2";
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root",
+  password: "",
   database: "miauauplanner",
   debug: true
 });
@@ -28,3 +28,39 @@ connection.on('error', (err) => {
 });
 
 export default connection;
+
+/**
+ * @swagger
+ * /animal/{id}:
+ *   get:
+ *     summary: Busca um animal pelo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: ID do animal
+ */
+
+/**
+ * @swagger
+ * /animal/{id}:
+ *   put:
+ *     summary: Atualiza um animal
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ */
