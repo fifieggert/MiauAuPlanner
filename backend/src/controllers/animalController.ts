@@ -73,7 +73,10 @@ const AnimalController = {
     create: (req: Request, res: Response) => {
         const { nome, raca, idade, genero, peso, id_usuario, id_especie } = req.body;
         AnimalRepositorie.create(nome, raca, idade, genero, peso, id_usuario, id_especie, (err, result) => {
-            if (err) return res.status(500).json({ error: "Erro no servidor" });
+            if (err) {
+                console.error("Erro ao criar animal:", err);
+                return res.status(500).json({ error: "Erro no servidor", details: err.message });
+            }
             res.status(201).json({ message: "Animal criado com sucesso", result });
         });
     },
