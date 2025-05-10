@@ -1,7 +1,7 @@
 import api from './api';
 
 export interface Pet {
-  id: string;
+  id: number;
   name: string;
   species: string;
   breed: string;
@@ -38,7 +38,7 @@ export const animalService = {
     return response.data;
   },
 
-  update: async (id: string, pet: Omit<Pet, 'id'>) => {
+  update: async (id: number, pet: Omit<Pet, 'id'>) => {
     const response = await api.put(`/animal/${id}`, {
       nome: pet.name,
       raca: pet.breed,

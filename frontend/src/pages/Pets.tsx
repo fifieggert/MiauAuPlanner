@@ -2,21 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Typography, Card, Modal, Form, Input, InputNumber, Select, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { animalService, Pet } from '../services/animalService';
+import { especiesService } from '../services/especiesService';
+import { Especie } from '../types/Especie';
 
 const { Title } = Typography;
 const { Option } = Select;
 
-// Map id_especie to species name
-const speciesIdToName: Record<number, string> = {
-  1: 'Cachorro',
-  2: 'Gato',
-  3: 'Pássaro',
-  4: 'Outro',
-};
-
-
 const Pets: React.FC = () => {
   const [pets, setPets] = useState<Pet[]>([]);
+  const [species, setSpecies] = useState<Especie[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
@@ -24,7 +18,18 @@ const Pets: React.FC = () => {
 
   useEffect(() => {
     loadPets();
+    loadSpecies();
   }, []);
+
+  const loadSpecies = async () => {
+    try {
+      const data = await especiesService.getAll();
+      console.log('Especies:', data);
+      setSpecies(data);
+    } catch (error) {
+      message.error('Erro ao carregar espécies');
+    }
+  };
 
   const loadPets = async () => {
     try {
@@ -32,9 +37,9 @@ const Pets: React.FC = () => {
       const data = await animalService.getAll();
       console.log('Data:', data);
       const mappedPets = data.map((pet: any) => ({
-        id: pet.id.toString(), // Corrigido para o campo "id"
+        id: pet.id,
         name: pet.nome,
-        species: speciesIdToName[pet.id_especie] || 'Outro',
+        species: pet.id_especie,
         breed: pet.raca,
         age: pet.idade,
         weight: pet.peso,
@@ -49,13 +54,6 @@ const Pets: React.FC = () => {
   };
   
 
-  const speciesOptions = [
-    { value: 'dog', label: 'Cachorro' },
-    { value: 'cat', label: 'Gato' },
-    { value: 'bird', label: 'Pássaro' },
-    { value: 'other', label: 'Outro' },
-  ];
-
   const handleAddPet = () => {
     setEditingPet(null);
     form.resetFields();
@@ -63,14 +61,15 @@ const Pets: React.FC = () => {
   };
 
   const handleEditPet = (pet: Pet) => {
+    console.log(pet, 'pet')
     setEditingPet(pet);
     form.setFieldsValue(pet);
     setIsModalVisible(true);
   };
 
-  const handleDeletePet = async (petId: string) => {
+  const handleDeletePet = async (petId: number) => {
     try {
-      await animalService.delete(parseInt(petId));
+      await animalService.delete(petId);
       message.success('Pet excluído com sucesso!');
       loadPets();
     } catch (error) {
@@ -81,6 +80,7 @@ const Pets: React.FC = () => {
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
+      
       if (editingPet) {
         await animalService.update(editingPet.id, values);
         message.success('Pet atualizado com sucesso!');
@@ -106,6 +106,10 @@ const Pets: React.FC = () => {
       title: 'Espécie',
       dataIndex: 'species',
       key: 'species',
+      render: (speciesId: number) => {
+        const especie = species.find(s => s.id === speciesId);
+        return especie ? especie.nome : 'Desconhecido';
+      },
     },
     {
       title: 'Raça',
@@ -203,9 +207,9 @@ const Pets: React.FC = () => {
               rules={[{ required: true, message: 'Por favor, selecione a espécie' }]}
             >
               <Select>
-                {speciesOptions.map(option => (
-                  <Option key={option.value} value={option.value}>
-                    {option.label}
+                {species.map(especie => (
+                  <Option key={especie.id} value={especie.id}>
+                    {especie.nome}
                   </Option>
                 ))}
               </Select>
