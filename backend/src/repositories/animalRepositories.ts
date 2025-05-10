@@ -37,10 +37,60 @@ const AnimalRepositorie = {
         });
     },
     delete: (ID_animal: any, callback: (err: Error | null, results?: any) => void) => {
-        const query =  'DELETE FROM animals WHERE id = ?'; 
-        connection.query(query, [ID_animal], (err: Error | null, results?: any) => {
-            if (err) return callback (err);
-            callback(null, results);
+        // Start a transaction
+        connection.beginTransaction((err) => {
+            if (err) return callback(err);
+
+            // Delete related records first
+            const deleteRelatedRecords = () => {
+                const queries = [
+                    'DELETE FROM vacinas WHERE id_animal = ?',
+                    'DELETE FROM alergias WHERE id_animal = ?',
+                    'DELETE FROM historico WHERE id_animal = ?',
+                    'DELETE FROM compromissos WHERE id_animal = ?'
+                ];
+
+                let completedQueries = 0;
+                let hasError = false;
+
+                queries.forEach(query => {
+                    connection.query(query, [ID_animal], (err) => {
+                        if (err) {
+                            hasError = true;
+                            connection.rollback(() => {
+                                callback(err);
+                            });
+                            return;
+                        }
+
+                        completedQueries++;
+                        if (completedQueries === queries.length && !hasError) {
+                            // After all related records are deleted, delete the animal
+                            connection.query('DELETE FROM animals WHERE id = ?', [ID_animal], (err, results) => {
+                                if (err) {
+                                    connection.rollback(() => {
+                                        callback(err);
+                                    });
+                                    return;
+                                }
+
+                                // If everything went well, commit the transaction
+                                connection.commit((err) => {
+                                    if (err) {
+                                        connection.rollback(() => {
+                                            callback(err);
+                                        });
+                                        return;
+                                    }
+                                    callback(null, results);
+                                });
+                            });
+                        }
+                    });
+                });
+            };
+
+            deleteRelatedRecords();
         });
     }
 };

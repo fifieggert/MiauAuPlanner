@@ -1,34 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Typography, Card, Modal, Form, Input, InputNumber, Select, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { animalService, Pet } from '../services/animalService';
 
 const { Title } = Typography;
 const { Option } = Select;
 
-interface Pet {
-  id: string;
-  name: string;
-  species: string;
-  breed: string;
-  age: number;
-  weight: number;
-  height: number;
-  observations: string;
-}
+// Map id_especie to species name
+const speciesIdToName: Record<number, string> = {
+  1: 'Cachorro',
+  2: 'Gato',
+  3: 'Pássaro',
+  4: 'Outro',
+};
+
 
 const Pets: React.FC = () => {
-  const [pets, setPets] = useState<Pet[]>(() => {
-    const savedPets = localStorage.getItem('pets');
-    return savedPets ? JSON.parse(savedPets) : [];
-  });
+  const [pets, setPets] = useState<Pet[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Salvar pets no localStorage sempre que houver mudanças
   useEffect(() => {
-    localStorage.setItem('pets', JSON.stringify(pets));
-  }, [pets]);
+    loadPets();
+  }, []);
+
+  const loadPets = async () => {
+    try {
+      setLoading(true);
+      const data = await animalService.getAll();
+      console.log('Data:', data);
+      const mappedPets = data.map((pet: any) => ({
+        id: pet.id.toString(), // Corrigido para o campo "id"
+        name: pet.nome,
+        species: speciesIdToName[pet.id_especie] || 'Outro',
+        breed: pet.raca,
+        age: pet.idade,
+        weight: pet.peso,
+        gender: pet.genero,
+      }));
+      setPets(mappedPets);
+    } catch (error) {
+      message.error('Erro ao carregar pets');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   const speciesOptions = [
     { value: 'dog', label: 'Cachorro' },
@@ -49,38 +68,32 @@ const Pets: React.FC = () => {
     setIsModalVisible(true);
   };
 
-  const handleDeletePet = (petId: string) => {
-    const updatedPets = pets.filter(pet => pet.id !== petId);
-    setPets(updatedPets);
-    message.success('Pet excluído com sucesso!');
+  const handleDeletePet = async (petId: string) => {
+    try {
+      await animalService.delete(parseInt(petId));
+      message.success('Pet excluído com sucesso!');
+      loadPets();
+    } catch (error) {
+      message.error('Erro ao excluir pet');
+    }
   };
 
-  const handleModalOk = () => {
-    form.validateFields().then(values => {
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields();
       if (editingPet) {
-        // Edição
-        setPets(prevPets => {
-          const updatedPets = prevPets.map(pet => 
-            pet.id === editingPet.id ? { ...pet, ...values } : pet
-          );
-          message.success('Pet atualizado com sucesso!');
-          return updatedPets;
-        });
+        await animalService.update(editingPet.id, values);
+        message.success('Pet atualizado com sucesso!');
       } else {
-        // Cadastro
-        const newPet: Pet = {
-          id: Date.now().toString(),
-          ...values,
-        };
-        setPets(prevPets => {
-          const updatedPets = [...prevPets, newPet];
-          message.success('Pet cadastrado com sucesso!');
-          return updatedPets;
-        });
+        await animalService.create(values);
+        message.success('Pet cadastrado com sucesso!');
       }
       setIsModalVisible(false);
       form.resetFields();
-    });
+      loadPets();
+    } catch (error) {
+      message.error('Erro ao salvar pet');
+    }
   };
 
   const columns = [
@@ -93,10 +106,6 @@ const Pets: React.FC = () => {
       title: 'Espécie',
       dataIndex: 'species',
       key: 'species',
-      render: (species: string) => {
-        const option = speciesOptions.find(opt => opt.value === species);
-        return option ? option.label : species;
-      },
     },
     {
       title: 'Raça',
@@ -116,10 +125,10 @@ const Pets: React.FC = () => {
       render: (weight: number) => `${weight} kg`,
     },
     {
-      title: 'Altura',
-      dataIndex: 'height',
-      key: 'height',
-      render: (height: number) => `${height} cm`,
+      title: 'Gênero',
+      dataIndex: 'gender',
+      key: 'gender',
+      render: (gender: string) => gender === 'M' ? 'Macho' : 'Fêmea',
     },
     {
       title: 'Ações',
@@ -160,6 +169,7 @@ const Pets: React.FC = () => {
           dataSource={pets}
           rowKey="id"
           pagination={{ pageSize: 10 }}
+          loading={loading}
         />
       </Card>
 
@@ -205,6 +215,7 @@ const Pets: React.FC = () => {
               name="breed"
               label="Raça"
               style={{ flex: 1 }}
+              rules={[{ required: true, message: 'Por favor, insira a raça' }]}
             >
               <Input />
             </Form.Item>
@@ -230,21 +241,17 @@ const Pets: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-              name="height"
-              label="Altura (cm)"
+              name="gender"
+              label="Gênero"
               style={{ flex: 1 }}
-              rules={[{ required: true, message: 'Por favor, insira a altura' }]}
+              rules={[{ required: true, message: 'Por favor, selecione o gênero' }]}
             >
-              <InputNumber min={0} style={{ width: '100%' }} />
+              <Select>
+                <Option value="M">Macho</Option>
+                <Option value="F">Fêmea</Option>
+              </Select>
             </Form.Item>
           </div>
-
-          <Form.Item
-            name="observations"
-            label="Observações"
-          >
-            <Input.TextArea rows={3} />
-          </Form.Item>
         </Form>
       </Modal>
     </div>

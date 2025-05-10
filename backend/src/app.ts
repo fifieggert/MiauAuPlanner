@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import setupSwagger from './routes/swagger';
 
 import userRouter from './routes/userRoutes';
@@ -10,6 +11,9 @@ import compromissoRouter from './routes/compromissosRoutes';
 import vacinaRouter from './routes/vacinasRoutes';
 
 const app = express();
+
+// Enable CORS
+app.use(cors());
 
 setupSwagger(app);
 
