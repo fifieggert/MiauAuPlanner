@@ -1,5 +1,5 @@
 import express from 'express';
-import setupSwagger from '../swagger';
+import setupSwagger from './routes/swagger';
 
 import userRouter from './routes/userRoutes';
 import animalRouter from './routes/animalRoutes';

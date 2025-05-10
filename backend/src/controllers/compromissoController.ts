@@ -29,22 +29,6 @@ import CompromissoRepositorie from "../repositories/compromissosRepositories";
  *                 type: number
  *               ID_clinica:
  *                 type: number
- *               ID_animal:
- *                 type: number 
- *               ID_vacina:
- *                 type: number
- *               ID_usuario:
- *                 type: number
- *               ID_veterinario:
- *                 type: number
- *               ID_clinica:
- *                 type: number
- *               ID_animal:
- *                 type: number
- *               ID_vacina:
- *                 type: number
- *               ID_usuario:
- *                 type: number 
  */ 
 
 const CompromissoController = {
@@ -57,19 +41,22 @@ const CompromissoController = {
     },
     findAll: (req: Request, res: Response) => {
         CompromissoRepositorie.findAll((err, compromisso) => {
-          if (err) return res.status(500).json({ error: "Erro no servidor" });
+          if (err) {
+            console.error("Erro no findAll:", err);
+            return res.status(500).json({ error: "Erro no servidor" });
+          }
           res.status(200).json(compromisso);
         });
-      },
-      findById: (req: Request, res: Response) => {
+    },
+    findById: (req: Request, res: Response) => {
         const { ID_compromissos } = req.params;
         CompromissoRepositorie.findById((ID_compromissos), (err, compromisso) => {
           if (err) return res.status(500).json({ error: "Erro no servidor" });
           if (!compromisso) return res.status(404).json({ error: "Compromisso não encontrada" });
           res.status(200).json(compromisso);
         });
-      },
-      update: (req: Request, res: Response) => {
+    },
+    update: (req: Request, res: Response) => {
         const ID_compromissos = Number(req.params.ID_compromissos);
         const { data_compromissos, observacoes } = req.body;
         console.log("ID_compromissos recebido:", ID_compromissos);
@@ -82,16 +69,15 @@ const CompromissoController = {
           }
           res.status(200).json({ message: "Compromisso atualizado com sucesso", result });
         });
-      },
-    
-      delete: (req: Request, res: Response) => {
+    },
+    delete: (req: Request, res: Response) => {
         const { ID_compromissos } = req.params;
         console.log(ID_compromissos, 'teste')
         CompromissoRepositorie.delete(ID_compromissos, (err, result) => {
           if (err) return res.status(500).json({ error: "Erro no servidor" });
           res.status(200).json({ message: "Compromissos deletado com sucesso", result });
         });
-      },
-    };
-    
-    export default CompromissoController;
+    },
+};
+
+export default CompromissoController;

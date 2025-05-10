@@ -32,12 +32,6 @@ const router = Router();
  *                 type: number
  *               ID_clinica:
  *                 type: number
- *               ID_animal:
- *                 type: number
- *               ID_vacina:
- *                 type: number
- *               ID_usuario:
- *                 type: number
  */
 router.post('/compromisso', compromissosController.create);      
 router.get('/compromisso', compromissosController.findAll);       

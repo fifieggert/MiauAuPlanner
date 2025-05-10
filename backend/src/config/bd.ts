@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
   debug: true
 });
 
-connection.connect((err) => {
+connection.connect((err: mysql.QueryError | null) => {
   if (err) {
     console.error("Erro ao conectar ao banco de dados:", err);
     return;
@@ -16,7 +16,7 @@ connection.connect((err) => {
   console.log("Conectado ao banco de dados MySQL!");
 });
 
-connection.on('error', (err) => {
+connection.on('error', (err: mysql.QueryError) => {
   console.error('Erro na conexão com o banco de dados:', err);
   if (err.code === 'PROTOCOL_CONNECTION_LOST') {
     console.error('Conexão com o banco de dados foi perdida. Tentando reconectar...');
