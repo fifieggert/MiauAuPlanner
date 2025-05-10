@@ -11,13 +11,7 @@ export interface Pet {
   observations?: string;
 }
 
-// Map species to id_especie
-const speciesToIdMap: Record<string, number> = {
-  'dog': 1, // Cachorro
-  'cat': 2, // Gato
-  'bird': 3, // Pássaro
-  'other': 4, // Outro
-};
+
 
 export const animalService = {
   getAll: async () => {
@@ -33,7 +27,7 @@ export const animalService = {
       genero: pet.gender,
       peso: pet.weight,
       id_usuario: 1, // TODO: Get from auth context
-      id_especie: speciesToIdMap[pet.species] || 4, // Default to 'other' if species not found
+      id_especie: pet.species, // Default to 'other' if species not found
     });
     return response.data;
   },
@@ -45,6 +39,7 @@ export const animalService = {
       idade: pet.age,
       genero: pet.gender,
       peso: pet.weight,
+      id_especie: pet.species,
     });
     return response.data;
   },

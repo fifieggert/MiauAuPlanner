@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "antd";
 import dayjs from "dayjs";
+import { animalService, Pet } from "../services/animalService";
 
 interface Appointment {
   id: string;
@@ -14,17 +15,6 @@ interface Appointment {
   };
 }
 
-interface Pet {
-  id: string;
-  name: string;
-  species: string;
-  breed: string;
-  age: number;
-  weight: number;
-  height: number;
-  observations: string;
-}
-
 const Dashboard: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
@@ -36,11 +26,17 @@ const Dashboard: React.FC = () => {
       setAppointments(JSON.parse(savedAppointments));
     }
 
-    // Fetch pets from localStorage
-    const savedPets = localStorage.getItem("pets");
-    if (savedPets) {
-      setPets(JSON.parse(savedPets));
-    }
+    // Fetch pets from API
+    const fetchPets = async () => {
+      try {
+        const petsData = await animalService.getAll();
+        setPets(petsData);
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+      }
+    };
+
+    fetchPets();
   }, []);
 
   // Get today's appointments
