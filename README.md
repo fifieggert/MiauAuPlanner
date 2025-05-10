@@ -120,3 +120,24 @@ Siga os passos abaixo para rodar o projeto em sua máquina:
 1. **Clone o repositório**:
    git clone https://github.com/fifieggert/MiauAuPlanner.git
    cd MiauAuPlanner
+
+2. **Configure o Backend**:
+   ```bash
+   # Entre na pasta do backend
+   cd backend
+
+   # Instale as dependências
+   npm install
+
+
+   # Inicie o servidor em modo desenvolvimento
+   npm run dev
+   ```
+
+   O servidor backend estará rodando em `http://localhost:3000`
+
+   **Observações importantes:**
+   - Certifique-se de ter o Node.js instalado (versão 18 ou superior)
+   - O MySQL deve estar instalado e rodando localmente
+   - Crie um banco de dados chamado `miauauplanner` antes de executar as migrações
+   - Substitua os valores das variáveis de ambiente pelos valores apropriados para seu ambiente

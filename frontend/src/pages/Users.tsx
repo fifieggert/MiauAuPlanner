@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Typography, Card, Modal, Form, Input, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { userService, Usuario } from '../services/userService';
 
 const { Title } = Typography;
 
-interface Usuario {
-  id?: number;
-  nome: string;
-  telefone: string;
-  cpf: string;
-  email: string;
-}
-
 const Users: React.FC = () => {
-  const [users, setUsers] = useState<Usuario[]>(() => {
-    const savedUsers = localStorage.getItem('users');
-    return savedUsers ? JSON.parse(savedUsers) : [];
-  });
+  const [users, setUsers] = useState<Usuario[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingUser, setEditingUser] = useState<Usuario | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Salvar usuários no localStorage sempre que houver mudanças
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const data = await userService.findAll();
+      setUsers(data);
+    } catch (error) {
+      message.error('Erro ao carregar usuários');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(users));
-  }, [users]);
+    fetchUsers();
+  }, []);
 
   const handleAddUser = () => {
     setEditingUser(null);
@@ -38,38 +40,32 @@ const Users: React.FC = () => {
     setIsModalVisible(true);
   };
 
-  const handleDeleteUser = (userId: number) => {
-    const updatedUsers = users.filter(user => user.id !== userId);
-    setUsers(updatedUsers);
-    message.success('Usuário excluído com sucesso!');
+  const handleDeleteUser = async (userId: number) => {
+    try {
+      await userService.delete(userId);
+      message.success('Usuário excluído com sucesso!');
+      fetchUsers();
+    } catch (error) {
+      message.error('Erro ao excluir usuário');
+    }
   };
 
-  const handleModalOk = () => {
-    form.validateFields().then(values => {
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields();
       if (editingUser) {
-        // Edição
-        setUsers(prevUsers => {
-          const updatedUsers = prevUsers.map(user => 
-            user.id === editingUser.id ? { ...user, ...values } : user
-          );
-          message.success('Usuário atualizado com sucesso!');
-          return updatedUsers;
-        });
+        await userService.update(editingUser.ID_usuario!, values);
+        message.success('Usuário atualizado com sucesso!');
       } else {
-        // Cadastro
-        const newUser: Usuario = {
-          id: Date.now(),
-          ...values,
-        };
-        setUsers(prevUsers => {
-          const updatedUsers = [...prevUsers, newUser];
-          message.success('Usuário cadastrado com sucesso!');
-          return updatedUsers;
-        });
+        await userService.create(values);
+        message.success('Usuário cadastrado com sucesso!');
       }
       setIsModalVisible(false);
       form.resetFields();
-    });
+      fetchUsers();
+    } catch (error) {
+      message.error('Erro ao salvar usuário');
+    }
   };
 
   const columns = [
@@ -109,7 +105,7 @@ const Users: React.FC = () => {
             type="link" 
             danger 
             icon={<DeleteOutlined />}
-            onClick={() => handleDeleteUser(record.id!)}
+            onClick={() => handleDeleteUser(record.ID_usuario!)}
           >
             Excluir
           </Button>
@@ -130,8 +126,9 @@ const Users: React.FC = () => {
         <Table
           columns={columns}
           dataSource={users}
-          rowKey="id"
+          rowKey="ID_usuario"
           pagination={{ pageSize: 10 }}
+          loading={loading}
         />
       </Card>
 
