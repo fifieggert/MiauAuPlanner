@@ -21,9 +21,8 @@ const vacinaAplicadasController = {
           if (err) return res.status(500).json({ error: "Erro no servidor" });
           if (!vacina) return res.status(404).json({ error: "Historico não encontrado" });
           res.status(200).json(vacina);
-        });
-      },
-      update: (req: Request, res: Response) => {
+        });git pull origin main --rebase
+
         const ID_vacina = (req.params.ID_vacina);
         const { dose, data_aplicacao } = req.body;
         console.log("ID_historico recebido:", ID_vacina);
