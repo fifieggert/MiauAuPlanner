@@ -1,10 +1,10 @@
-export class Historico{
-    id?: number;
+export class Historico {
+    id?: any;
     data_historico: any;
-    id_animal: number;
+    id_animal: any;
     observacoes: string;
 
-    constructor(data_historico: any, id_animal: number, observacoes: string, id: number) {
+    constructor(data_historico: any, id_animal: any, observacoes: string, id: number) {
         this.id = id;
         this.data_historico = data_historico;
         this.id_animal = id_animal;

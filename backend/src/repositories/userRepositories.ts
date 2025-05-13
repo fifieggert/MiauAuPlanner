@@ -18,27 +18,27 @@ const UserRepositorie = {
     });
   },
   findById: (ID_usuario: any, callback: (err: Error | null, results?: any) => void) => {
-    const query = 'SELECT * FROM usuario WHERE ID_usuario = ?'; 
+    const query = 'SELECT * FROM usuario WHERE ID_usuario = ?';
     connection.query(query, [ID_usuario], (err: Error | null, results?: any) => {
-        if(err) return callback(err);
-        callback(null, results);
+      if (err) return callback(err);
+      callback(null, results);
     });
   },
-  update: (ID_usuario: number, nome: string, telefone: string, email: string, callback:(err: Error | null, results?: any) => void) => {
+  update: (ID_usuario: number, nome: string, telefone: string, email: string, callback: (err: Error | null, results?: any) => void) => {
     console.log("Valores recebidos no update:", { ID_usuario, nome, telefone, email });
 
     const query = 'UPDATE usuario SET nome = ?, telefone = ?, email = ? WHERE ID_usuario = ?';
     connection.query(query, [nome, telefone, email, ID_usuario], (err: Error | null, results?: any) => {
-        if (err) return callback(err); 
-        callback(null, results);
+      if (err) return callback(err);
+      callback(null, results);
     });
-},
+  },
 
-  delete: (ID_usuario: any, callback:(err: Error | null, results?: any) => void ) => {
-    const query =  'DELETE FROM usuario WHERE ID_usuario = ? ';
-    connection.query(query, [ID_usuario],(err: Error | null, results?: any) => {
-        if(err) return callback(err); 
-        callback(null, results); 
+  delete: (ID_usuario: any, callback: (err: Error | null, results?: any) => void) => {
+    const query = 'DELETE FROM usuario WHERE ID_usuario = ? ';
+    connection.query(query, [ID_usuario], (err: Error | null, results?: any) => {
+      if (err) return callback(err);
+      callback(null, results);
     });
   }
 };

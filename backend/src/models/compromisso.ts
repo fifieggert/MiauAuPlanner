@@ -1,4 +1,4 @@
-export class Compromisso{
+export class Compromisso {
     id?: number;
     data_compromissos: any;
     ID_animal: number;

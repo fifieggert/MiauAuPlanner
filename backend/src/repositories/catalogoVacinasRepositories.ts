@@ -2,15 +2,15 @@ import { CatalogoVacinas } from "../models/catalogoVacinas";
 import connection from "../config/bd";
 
 const catalogoVacinasRepositorie = {
-    create: (nome_vacina: string, fabricante: string ,callback: (err: Error | null, results?: any) => void) => {
-        const query = 'INSERT INTO catalago_vacinas (nome_vacina, fabricante) VALUES (?, ?)';
+    create: (nome_vacina: string, fabricante: string, callback: (err: Error | null, results?: any) => void) => {
+        const query = 'INSERT INTO catalogo_vacinas (nome_vacina, fabricante) VALUES (?, ?)';
         connection.query(query, [nome_vacina, fabricante], (err: Error | null, results?: any) => {
             if (err) return callback(err);
             callback(null, results);
         });
     },
     findAll: (callback: (err: Error | null, results?: any) => void) => {
-        const query = 'SELECT * FROM catalago_vacinas';
+        const query = 'SELECT * FROM catalogo_vacinas';
         connection.query(query, (err: Error | null, results?: any) => {
             if (err) return callback(err);
             callback(null, results);
@@ -33,9 +33,9 @@ const catalogoVacinasRepositorie = {
         });
     },
     delete: (ID_catalogo: any, callback: (err: Error | null, results?: any) => void) => {
-        const query =  'DELETE FROM catalogo_vacinas WHERE ID_catalogo = ?'; 
+        const query = 'DELETE FROM catalogo_vacinas WHERE ID_catalogo = ?';
         connection.query(query, [ID_catalogo], (err: Error | null, results?: any) => {
-            if (err) return callback (err);
+            if (err) return callback(err);
             callback(null, results);
         });
     }

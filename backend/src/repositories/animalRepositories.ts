@@ -35,9 +35,9 @@ const AnimalRepositorie = {
         });
     },
     delete: (ID_animal: any, callback: (err: Error | null, results?: any) => void) => {
-        const query =  'DELETE FROM animal WHERE ID_animal = ?'; 
+        const query = 'DELETE FROM animal WHERE ID_animal = ?';
         connection.query(query, [ID_animal], (err: Error | null, results?: any) => {
-            if (err) return callback (err);
+            if (err) return callback(err);
             callback(null, results);
         });
     }

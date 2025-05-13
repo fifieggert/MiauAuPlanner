@@ -5,22 +5,22 @@ const HistoricoRepositorie = {
     create: (data_historico: any, ID_animal: number, observacoes: string, callback: (err: Error | null, results?: any) => void) => {
         const query = 'INSERT INTO historico (data_historico, ID_animal, observacoes) values (?, ?, ?)';
         connection.query(query, [data_historico, ID_animal, observacoes], (err: Error | null, results?: any) => {
-            if (err) return callback (err);
-            callback (null, results); 
+            if (err) return callback(err);
+            callback(null, results);
         });
-    }, 
+    },
     findAll: (callback: (err: Error | null, results?: any) => void) => {
         const query = 'SELECT * FROM historico';
         connection.query(query, (err: Error | null, results?: any) => {
-            if (err) return callback (err);
-            callback (null, results);
+            if (err) return callback(err);
+            callback(null, results);
         });
     },
     findById: (ID_historico: any, callback: (err: Error | null, results?: any) => void) => {
         const query = 'SELECT * FROM historico WHERE ID_historico = ?';
         connection.query(query, [ID_historico], (err: Error | null, results?: any) => {
-            if (err) return callback (err);
-            callback (null, results);
+            if (err) return callback(err);
+            callback(null, results);
         });
     },
     update: (data_historico: any, observacoes: string, ID_historico: any, callback: (err: Error | null, results?: any) => void) => {
@@ -35,8 +35,8 @@ const HistoricoRepositorie = {
     delete: (ID_historico: any, callback: (err: Error | null, results?: any) => void) => {
         const query = 'DELETE FROM historico WHERE ID_historico = ?';
         connection.query(query, [ID_historico], (err: Error | null, results?: any) => {
-            if (err) return callback (err);
-            callback (null, results);
+            if (err) return callback(err);
+            callback(null, results);
         });
     }
 };
