@@ -1,11 +1,11 @@
-import { User } from "../models/user";
+import { Usuario } from "../models/usuario";
 import connection from "../config/bd";
 
 
-const UserRepositorie = {
-  create: (nome: string, telefone: string, cpf: string, email: string, callback: (err: Error | null, results?: any) => void) => {
-    const query = 'INSERT INTO usuario (nome, telefone, cpf, email) VALUES (?, ?, ?, ?)';
-    connection.query(query, [nome, telefone, cpf, email], (err: Error | null, results?: any) => {
+const usuarioRepositorie = {
+  create: (nome: string, telefone: string, cpf: string, email: string, senha: string, callback: (err: Error | null, results?: any) => void) => {
+    const query = 'INSERT INTO usuario (nome, telefone, cpf, email, senha) VALUES (?, ?, ?, ?, ?)';
+    connection.query(query, [nome, telefone, cpf, email, senha], (err: Error | null, results?: any) => {
       if (err) return callback(err);
       callback(null, results);
     });
@@ -24,6 +24,13 @@ const UserRepositorie = {
       callback(null, results);
     });
   },
+  findByEmail: (email: string, callback: (err: Error | null, results?: any) => void) => {
+  const query = 'SELECT * FROM usuario WHERE email = ?';
+  connection.query(query, [email], (err: Error | null, results?: any) => {
+    if (err) return callback(err);
+    callback(null, results[0]); // retorna um único usuário
+  });
+},
   update: (ID_usuario: number, nome: string, telefone: string, email: string, callback: (err: Error | null, results?: any) => void) => {
     console.log("Valores recebidos no update:", { ID_usuario, nome, telefone, email });
 
@@ -43,4 +50,4 @@ const UserRepositorie = {
   }
 };
 
-export default UserRepositorie;
+export default usuarioRepositorie;

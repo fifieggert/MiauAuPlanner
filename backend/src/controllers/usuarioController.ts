@@ -1,28 +1,35 @@
 import { Request, Response } from "express";
-import UserRepository from "../repositories/userRepositories";
+import usuarioRepositorie from "../repositories/usuarioRepositories";
+import bcrypt from "bcrypt"; // ✅ importe no topo
 
-const userController = {
+const usuarioController = {
   create: (req: Request, res: Response) => {
-    const { nome, telefone, email, cpf } = req.body;
-    UserRepository.create(nome, telefone, cpf, email, (err, result) => {
+    const { nome, telefone, email, cpf, senha } = req.body;
+
+    // Criptografar a senha
+  bcrypt.hash(senha, 10, (err, hash) => {
+    if (err) return res.status(500).json({ error: "Erro ao criptografar senha" });
+
+    usuarioRepositorie.create(nome, telefone, cpf, email, hash, (err, result) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
       res.status(201).json({ message: "Usuário criado com sucesso", result });
     });
-  },
+  });
+},
 
   findAll: (req: Request, res: Response) => {
-    UserRepository.findAll((err, users) => {
+    usuarioRepositorie.findAll((err, usuario) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
-      res.status(200).json(users);
+      res.status(200).json(usuario);
     });
   },
 
   findById: (req: Request, res: Response) => {
     const { ID_usuario } = req.params;
-    UserRepository.findById((ID_usuario), (err, user) => {
+    usuarioRepositorie.findById((ID_usuario), (err, usuario) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
-      if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
-      res.status(200).json(user);
+      if (!usuario) return res.status(404).json({ error: "Usuário não encontrado" });
+      res.status(200).json(usuario);
     });
   },
 
@@ -32,7 +39,7 @@ const userController = {
     console.log("ID_usuario recebido:", ID_usuario);
     console.log("Dados recebidos:", { nome, telefone, email, cpf });
 
-    UserRepository.update(ID_usuario, nome, telefone, email, (err, result) => {
+    usuarioRepositorie.update(ID_usuario, nome, telefone, email, (err, result) => {
       if (err) {
         console.error("Erro no update:", err);
         return res.status(500).json({ error: "Erro no servidor", details: err });
@@ -44,11 +51,11 @@ const userController = {
   delete: (req: Request, res: Response) => {
     const { ID_usuario } = req.params;
     console.log(ID_usuario, 'teste')
-    UserRepository.delete(ID_usuario, (err, result) => {
+    usuarioRepositorie.delete(ID_usuario, (err, result) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
       res.status(200).json({ message: "Usuário deletado com sucesso", result });
     });
   },
 };
 
-export default userController;
+export default usuarioController;

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 
-import userRouter from './routes/userRoutes'
+import userRouter from './routes/usuarioRoutes'
 import animalRouter from './routes/animalRoutes'
 import especieRouter from './routes/especieRoutes'
 import alergiaRouter from './routes/alergiaRoutes'
@@ -8,10 +8,12 @@ import historicoRouter from './routes/historicoRoutes'
 import compromissosRouter from './routes/compromissosRoutes'
 import catalogoRouter from './routes/catalogoVacinasRoutes'
 import VacinasAplicadasRouter from './routes/vacinasAplicadasRoutes'
+import loginRoutes from './routes/loginRoutes'
 
 const app = express();
 
 app.use(express.json());
+app.use("/api", loginRoutes);
 
 app.use(userRouter);
 app.use(animalRouter);
