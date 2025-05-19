@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import usuarioRepositorie from "../repositories/usuarioRepositories";
-import bcrypt from "bcrypt"; // ✅ importe no topo
+import bcrypt from "bcrypt"; 
 
 const usuarioController = {
   create: (req: Request, res: Response) => {

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import usuarioRepositorie from "../repositories/usuarioRepositories";
-import auth from "../constants/auth"; // ou constants/auth.ts
+import auth from "../constants/auth"; 
 
 const loginController = {
     login: (req: Request, res: Response) => {
