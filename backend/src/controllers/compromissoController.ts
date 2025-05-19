@@ -3,10 +3,10 @@ import CompromissoRepositorie from "../repositories/compromissosRepositories";
 
 const CompromissoController = {
   create: (req: Request, res: Response) => {
-    const { data_compromissos, ID_animal, obrservacoes } = req.body;
-    CompromissoRepositorie.create(data_compromissos, ID_animal, obrservacoes, (err, result) => {
+    const { data_compromissos, ID_animal, observacoes } = req.body;
+    CompromissoRepositorie.create(data_compromissos, ID_animal, observacoes, (err, result) => {
       if (err) return res.status(500).json({ error: "Erro no servidor" });
-      res.status(201).json({ message: "Compromissos criado com sucesso", result })
+      res.status(201).json({ message: "Compromisso criado com sucesso", result })
     });
   },
   findAll: (req: Request, res: Response) => {
