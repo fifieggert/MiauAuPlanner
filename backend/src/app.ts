@@ -11,7 +11,9 @@ import VacinasAplicadasRouter from './routes/vacinasAplicadasRoutes'
 import loginRoutes from './routes/loginRoutes'
 
 const app = express();
+const cors = require ( "cors" );
 
+app.use(cors());
 app.use(express.json());
 app.use("/api", loginRoutes);
 
