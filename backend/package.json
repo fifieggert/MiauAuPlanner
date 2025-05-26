@@ -4,6 +4,8 @@
   "description": "O **MiauAuPlanner** é uma aplicação web desenvolvida dentro da disciplina **Programação Web** na instituição **CATÓLICA DE SANTA CATARINA** para ajudar tutores a gerenciar os cuidados diários dos seus pets de forma prática e eficiente. \r Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para garantir que seu animal de estimação receba os melhores cuidados, sempre no momento certo. 🐶🐱",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "dev": "ts-node src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js"
@@ -22,14 +24,17 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "@vitejs/plugin-react": "^4.4.1",
+    "jest": "^29.7.0",
     "mysql2": "^3.14.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }

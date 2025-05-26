@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 
 import userRouter from './routes/usuarioRoutes'
 import animalRouter from './routes/animalRoutes'
@@ -30,3 +30,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
+export default app;

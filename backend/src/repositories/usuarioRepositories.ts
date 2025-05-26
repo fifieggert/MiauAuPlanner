@@ -25,12 +25,19 @@ const usuarioRepositorie = {
     });
   },
   findByEmail: (email: string, callback: (err: Error | null, results?: any) => void) => {
-  const query = 'SELECT * FROM usuario WHERE email = ?';
-  connection.query(query, [email], (err: Error | null, results?: any) => {
-    if (err) return callback(err);
-    callback(null, results[0]); // retorna um único usuário
-  });
-},
+    const query = 'SELECT * FROM usuario WHERE email = ?';
+    connection.query(query, [email], (err: Error | null, results?: any) => {
+      if (err) return callback(err);
+      callback(null, results[0]); 
+    });
+  },
+  updatePassword: (ID_usuario: any, novaSenha: string, callback: (err: Error | null, results?: any) => void) => {
+    const query = 'UPDATE usuario SET senha = ? WHERE ID_usuario = ?';
+    connection.query(query, [novaSenha, ID_usuario], (err: Error | null, results?: any) => {
+      if (err) return callback(err);
+      callback(null, results);
+    });
+  },
   update: (ID_usuario: number, nome: string, telefone: string, email: string, callback: (err: Error | null, results?: any) => void) => {
     console.log("Valores recebidos no update:", { ID_usuario, nome, telefone, email });
 
