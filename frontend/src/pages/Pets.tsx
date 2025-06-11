@@ -149,7 +149,7 @@ const Pets: React.FC = () => {
   return (
     <div>
       <Card>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: '8px' }}>
           <Title level={4} style={{ margin: 0 }}>Pets</Title>
           <Button type="primary" icon={<PlusOutlined />} onClick={handleAddPet}>
             Adicionar Pet
@@ -160,7 +160,15 @@ const Pets: React.FC = () => {
           dataSource={pets}
           rowKey="id"
           loading={loading}
-          pagination={{ pageSize: 10 }}
+          pagination={{ 
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total) => `Total ${total} itens`,
+            responsive: true,
+            size: 'small'
+          }}
+          scroll={{ x: 'max-content' }}
+          size="small"
         />
       </Card>
 
@@ -172,7 +180,8 @@ const Pets: React.FC = () => {
           setIsModalVisible(false);
           form.resetFields();
         }}
-        width={500}
+        width="90%"
+        style={{ maxWidth: 500 }}
       >
         <Form
           form={form}
@@ -186,11 +195,11 @@ const Pets: React.FC = () => {
             <Input />
           </Form.Item>
 
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <Form.Item
               name="species"
               label="Espécie"
-              style={{ flex: 1 }}
+              style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: 'Por favor, selecione a espécie' }]}
             >
               <Select>
@@ -205,18 +214,18 @@ const Pets: React.FC = () => {
             <Form.Item
               name="breed"
               label="Raça"
-              style={{ flex: 1 }}
+              style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: 'Por favor, insira a raça' }]}
             >
               <Input />
             </Form.Item>
           </div>
 
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <Form.Item
               name="age"
               label="Idade"
-              style={{ flex: 1 }}
+              style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: 'Por favor, insira a idade' }]}
             >
               <InputNumber min={0} style={{ width: '100%' }} />
@@ -225,7 +234,7 @@ const Pets: React.FC = () => {
             <Form.Item
               name="weight"
               label="Peso (kg)"
-              style={{ flex: 1 }}
+              style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: 'Por favor, insira o peso' }]}
             >
               <InputNumber min={0} step={0.1} style={{ width: '100%' }} />
@@ -238,8 +247,8 @@ const Pets: React.FC = () => {
             rules={[{ required: true, message: 'Por favor, selecione o gênero' }]}
           >
             <Select>
-              <Option value="Macho">Macho</Option>
-              <Option value="Fêmea">Fêmea</Option>
+              <Option value="M">Macho</Option>
+              <Option value="F">Fêmea</Option>
             </Select>
           </Form.Item>
 
@@ -247,7 +256,7 @@ const Pets: React.FC = () => {
             name="observations"
             label="Observações"
           >
-            <Input.TextArea rows={3} />
+            <Input.TextArea rows={4} />
           </Form.Item>
         </Form>
       </Modal>

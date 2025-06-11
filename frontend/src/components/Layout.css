@@ -1,20 +1,244 @@
-.logo-container {
-  padding: 16px;
-  text-align: center;
-  border-bottom: 1px solid #f0f0f0;
+:root {
+  /* Cores */
+  --primary-color: #4CAF50;
+  --primary-light: #E8F5E9;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --border-color: #f0f0f0;
+  --background-light: #F7F9FA;
+  --white: #fff;
+
+  /* Espaçamentos */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+
+  /* Tamanhos */
+  --header-height: 3.5rem;  /* 56px */
+  --sidebar-width: 12.5rem; /* 200px */
+  --sidebar-collapsed-width: 5rem; /* 80px */
+  --menu-item-height: 2.5rem; /* 40px */
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Breakpoints */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
 }
 
-/* Ensure the content doesn't get hidden behind the fixed sidebar */
-.ant-layout {
-  overflow-x: hidden;
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Add smooth transition for sidebar collapse */
-.ant-layout-sider {
+body, html, #root {
+  height: 100%;
+  background: var(--background-light);
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+/* Layout principal */
+.app-layout {
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.app-sider {
+  background: var(--white) !important;
+  box-shadow: var(--shadow-sm);
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1000;
   transition: all 0.2s;
 }
 
-/* Ensure the content area has proper spacing */
-.ant-layout-content {
-  min-height: calc(100vh - 64px);
-} 
+.logo-container {
+  height: var(--header-height);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo-text {
+  color: var(--primary-color) !important;
+  margin: 0 !important;
+  font-weight: 600 !important;
+}
+
+/* Header */
+.app-header {
+  background: var(--white) !important;
+  padding: 0 var(--spacing-lg) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: var(--shadow-sm);
+  height: var(--header-height);
+  transition: all 0.2s;
+}
+
+.trigger-button {
+  font-size: 1.125rem;
+  padding: 0 var(--spacing-md);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger-button:hover {
+  color: var(--primary-color);
+}
+
+.user-welcome {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Conteúdo principal */
+.app-content {
+  margin: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: var(--white);
+  border-radius: 0.5rem;
+  min-height: calc(100vh - var(--header-height) * 2);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+/* Menu */
+.ant-menu {
+  border-right: none !important;
+}
+
+.ant-menu-item {
+  margin: var(--spacing-xs) 0 !important;
+  padding: 0 var(--spacing-md) !important;
+  height: var(--menu-item-height) !important;
+  line-height: var(--menu-item-height) !important;
+}
+
+.ant-menu-item-selected {
+  background-color: var(--primary-light) !important;
+}
+
+.ant-menu-item-selected::after {
+  border-right-color: var(--primary-color) !important;
+}
+
+.ant-menu-item:hover {
+  background-color: var(--background-light) !important;
+}
+
+/* Mobile Navigation */
+.mobile-header {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-logo {
+  color: var(--primary-color) !important;
+  margin: 0 !important;
+  font-size: 1.2rem !important;
+}
+
+.mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+}
+
+.mobile-nav .ant-menu {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mobile-nav .ant-menu-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Ajustes para o layout com sidebar */
+.ant-layout {
+  transition: all 0.2s;
+}
+
+.ant-layout-sider-collapsed + .ant-layout .app-content {
+  margin-left: calc(var(--sidebar-collapsed-width) + var(--spacing-lg));
+}
+
+.ant-layout-sider:not(.ant-layout-sider-collapsed) + .ant-layout .app-content {
+  margin-left: calc(var(--sidebar-width) + var(--spacing-lg));
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .app-content {
+    margin: var(--spacing-md) !important;
+    padding: var(--spacing-md);
+    min-height: calc(100vh - var(--header-height) * 2.5);
+  }
+
+  .app-header {
+    padding: 0 var(--spacing-md) !important;
+  }
+
+  .user-welcome {
+    font-size: 0.8rem;
+  }
+
+  .mobile-nav .ant-menu-item {
+    height: calc(var(--header-height) + var(--spacing-xs)) !important;
+  }
+
+  .mobile-nav .anticon {
+    font-size: 1.25rem !important;
+  }
+
+  /* Reset das margens do conteúdo em mobile */
+  .ant-layout-sider-collapsed + .ant-layout .app-content,
+  .ant-layout-sider:not(.ant-layout-sider-collapsed) + .ant-layout .app-content {
+    margin-left: var(--spacing-md) !important;
+  }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+  .app-content {
+    margin: var(--spacing-sm) !important;
+    padding: var(--spacing-md);
+  }
+
+  .app-header {
+    padding: 0 var(--spacing-sm) !important;
+  }
+
+  .mobile-logo {
+    font-size: 1rem !important;
+  }
+
+  /* Reset das margens do conteúdo em telas muito pequenas */
+  .ant-layout-sider-collapsed + .ant-layout .app-content,
+  .ant-layout-sider:not(.ant-layout-sider-collapsed) + .ant-layout .app-content {
+    margin-left: var(--spacing-sm) !important;
+  }
+}

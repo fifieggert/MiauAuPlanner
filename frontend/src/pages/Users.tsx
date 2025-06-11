@@ -121,7 +121,7 @@ const Users: React.FC = () => {
   return (
     <div>
       <Card>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: '8px' }}>
           <Title level={4} style={{ margin: 0 }}>Usuários</Title>
           <Button type="primary" icon={<PlusOutlined />} onClick={handleAddUser}>
             Adicionar Usuário
@@ -132,7 +132,15 @@ const Users: React.FC = () => {
           dataSource={users}
           rowKey="ID_usuario"
           loading={loading}
-          pagination={{ pageSize: 10 }}
+          pagination={{ 
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total) => `Total ${total} itens`,
+            responsive: true,
+            size: 'small'
+          }}
+          scroll={{ x: 'max-content' }}
+          size="small"
         />
       </Card>
 
@@ -144,7 +152,8 @@ const Users: React.FC = () => {
           setIsModalVisible(false);
           form.resetFields();
         }}
-        width={500}
+        width="90%"
+        style={{ maxWidth: 500 }}
       >
         <Form
           form={form}
@@ -153,26 +162,30 @@ const Users: React.FC = () => {
           <Form.Item
             name="nome"
             label="Nome"
-            rules={[{ required: true, message: 'Por favor, insira o nome do usuário' }]}
+            rules={[{ required: true, message: 'Por favor, insira o nome' }]}
           >
             <Input />
           </Form.Item>
 
-          <Form.Item
-            name="telefone"
-            label="Telefone"
-            rules={[{ required: true, message: 'Por favor, insira o telefone' }]}
-          >
-            <Input />
-          </Form.Item>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <Form.Item
+              name="telefone"
+              label="Telefone"
+              style={{ flex: '1 1 200px' }}
+              rules={[{ required: true, message: 'Por favor, insira o telefone' }]}
+            >
+              <Input />
+            </Form.Item>
 
-          <Form.Item
-            name="cpf"
-            label="CPF"
-            rules={[{ required: true, message: 'Por favor, insira o CPF' }]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item
+              name="cpf"
+              label="CPF"
+              style={{ flex: '1 1 200px' }}
+              rules={[{ required: true, message: 'Por favor, insira o CPF' }]}
+            >
+              <Input />
+            </Form.Item>
+          </div>
 
           <Form.Item
             name="email"
@@ -185,13 +198,15 @@ const Users: React.FC = () => {
             <Input />
           </Form.Item>
 
-          <Form.Item
-            name="senha"
-            label="Senha"
-            rules={editingUser ? [] : [{ required: true, message: 'Por favor, insira a senha' }]}
-          >
-            <Input.Password autoComplete="new-password" />
-          </Form.Item>
+          {!editingUser && (
+            <Form.Item
+              name="senha"
+              label="Senha"
+              rules={[{ required: true, message: 'Por favor, insira a senha' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+          )}
         </Form>
       </Modal>
     </div>

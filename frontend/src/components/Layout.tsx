@@ -1,116 +1,138 @@
-import React from 'react';
-import { Layout, Menu, Typography } from 'antd';
-import { UserOutlined, CalendarOutlined, TeamOutlined, LogoutOutlined, HomeOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Layout, Menu, Typography, Button } from 'antd';
+import {
+  UserOutlined,
+  CalendarOutlined,
+  TeamOutlined,
+  LogoutOutlined,
+  HomeOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from '@ant-design/icons';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import './Layout.css';
 
-const { Header, Sider, Content } = Layout;
-const { Title } = Typography;
+const { Header, Content, Sider } = Layout;
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const getSelectedKey = () => {
+    const path = location.pathname;
+    if (path.includes('/dashboard')) return '1';
+    if (path.includes('/appointments')) return '2';
+    if (path.includes('/pets')) return '3';
+    if (path.includes('/users')) return '4';
+    return '1';
+  };
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
+  const handleMenuClick = (key: string) => {
+    switch (key) {
+      case '1':
+        navigate('/dashboard');
+        break;
+      case '2':
+        navigate('/appointments');
+        break;
+      case '3':
+        navigate('/pets');
+        break;
+      case '4':
+        navigate('/users');
+        break;
+      case '5':
+        handleLogout();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const menuItems = [
+    { key: '1', icon: <HomeOutlined />, label: 'Início' },
+    { key: '2', icon: <CalendarOutlined />, label: 'Agendamentos' },
+    { key: '3', icon: <TeamOutlined />, label: 'Pets' },
+    { key: '4', icon: <UserOutlined />, label: 'Usuários' },
+    { key: '5', icon: <LogoutOutlined />, label: 'Sair' },
+  ];
+
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        width={250}
-        style={{
-          background: '#FFFFFF',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          position: 'fixed',
-          height: '100vh',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          zIndex: 1000,
-        }}
-      >
-        <div className="logo-container">
-          <Title level={4} style={{ color: '#4CAF50', margin: 0 }}>
-            MiauAuPlanner
-          </Title>
-        </div>
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          style={{
-            background: '#FFFFFF',
-            borderRight: 'none',
-          }}
+    <Layout className="app-layout">
+      {!isMobile && (
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          className="app-sider"
+          width={200}
         >
-          <Menu.Item 
-            key="1" 
-            icon={<HomeOutlined style={{ color: '#4CAF50' }} />}
-            style={{ margin: '8px 0' }}
-            onClick={() => navigate('/dashboard')}
-          >
-            Início
-          </Menu.Item>
-          <Menu.Item 
-            key="2" 
-            icon={<CalendarOutlined style={{ color: '#FFC107' }} />}
-            style={{ margin: '8px 0' }}
-            onClick={() => navigate('/appointments')}
-          >
-            Agendamentos
-          </Menu.Item>
-          <Menu.Item 
-            key="3" 
-            icon={<TeamOutlined style={{ color: '#81C784' }} />}
-            style={{ margin: '8px 0' }}
-            onClick={() => navigate('/pets')}
-          >
-            Pets
-          </Menu.Item>
-          <Menu.Item 
-            key="4" 
-            icon={<UserOutlined style={{ color: '#2196F3' }} />}
-            style={{ margin: '8px 0' }}
-            onClick={() => navigate('/users')}
-          >
-            Usuários
-          </Menu.Item>
-          <Menu.Item 
-            key="5" 
-            icon={<LogoutOutlined style={{ color: '#F44336' }} />}
-            onClick={handleLogout}
-            style={{ margin: '8px 0' }}
-          >
-            Sair
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout style={{ marginLeft: 250 }}>
-        <Header style={{ 
-          padding: 0, 
-          background: '#FFFFFF',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 999,
-        }}>
-          <Title level={4} style={{ margin: '16px 24px', color: '#212121' }}>
+          <div className="logo-container">
+            <Typography.Title level={4} className="logo-text">
+              {!collapsed && 'MiauAuPlanner'}
+            </Typography.Title>
+          </div>
+          <Menu
+            theme="light"
+            mode="inline"
+            selectedKeys={[getSelectedKey()]}
+            onClick={({ key }) => handleMenuClick(key as string)}
+            items={menuItems}
+          />
+        </Sider>
+      )}
+      <Layout>
+        <Header className="app-header">
+          {!isMobile && (
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              className="trigger-button"
+            />
+          )}
+          {isMobile && (
+            <div className="mobile-header">
+              <Typography.Title level={4} className="mobile-logo">
+                MiauAuPlanner
+              </Typography.Title>
+            </div>
+          )}
+          <div className="user-welcome">
             Bem-vindo, {user?.name}!
-          </Title>
+          </div>
         </Header>
-        <Content style={{ 
-          margin: '24px 16px', 
-          padding: 24, 
-          background: '#F1F8E9',
-          minHeight: 280,
-          borderRadius: '8px',
-        }}>
+        <Content className="app-content">
           <Outlet />
         </Content>
+        {isMobile && (
+          <div className="mobile-nav">
+            <Menu
+              mode="horizontal"
+              selectedKeys={[getSelectedKey()]}
+              onClick={({ key }) => handleMenuClick(key as string)}
+              items={menuItems}
+            />
+          </div>
+        )}
       </Layout>
     </Layout>
   );
