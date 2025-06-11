@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Pets from './pages/Pets';
 import Users from './pages/Users';
 import Appointments from './pages/Appointments';
+import Species from './pages/Species';
 import AppLayout from './components/Layout';
 import 'antd/dist/reset.css';
 
@@ -32,6 +33,7 @@ const App: React.FC = () => {
               <Route path="/pets" element={<Pets />} />
               <Route path="/users" element={<Users />} />
               <Route path="/appointments" element={<Appointments />} />
+              <Route path="/species" element={<Species />} />
             </Route>
           </Routes>
         </Router>

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Typography, Card, Modal, Form, Input, InputNumber, Select, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { animalService, Pet } from '../services/animalService';
+import { speciesService, Species } from '../services/speciesService';
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const Pets: React.FC = () => {
   const [pets, setPets] = useState<Pet[]>([]);
+  const [species, setSpecies] = useState<Species[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
@@ -25,16 +27,19 @@ const Pets: React.FC = () => {
     }
   };
 
+  const fetchSpecies = async () => {
+    try {
+      const data = await speciesService.getAll();
+      setSpecies(data);
+    } catch (error) {
+      message.error('Erro ao carregar espécies');
+    }
+  };
+
   useEffect(() => {
     fetchPets();
+    fetchSpecies();
   }, []);
-
-  const speciesOptions = [
-    { value: 1, label: 'Cachorro' },
-    { value: 2, label: 'Gato' },
-    { value: 3, label: 'Pássaro' },
-    { value: 4, label: 'Outro' },
-  ];
 
   const handleAddPet = () => {
     setEditingPet(null);
@@ -84,6 +89,11 @@ const Pets: React.FC = () => {
     }
   };
 
+  const getSpeciesName = (speciesId: number) => {
+    const speciesObj = species.find(s => s.ID_especie === speciesId);
+    return speciesObj ? speciesObj.especie : 'Espécie não encontrada';
+  };
+
   const columns = [
     {
       title: 'Nome',
@@ -94,10 +104,7 @@ const Pets: React.FC = () => {
       title: 'Espécie',
       dataIndex: 'species',
       key: 'species',
-      render: (species: number) => {
-        const option = speciesOptions.find(opt => opt.value === species);
-        return option ? option.label : 'Desconhecido';
-      },
+      render: (speciesId: number) => getSpeciesName(speciesId),
     },
     {
       title: 'Raça',
@@ -180,7 +187,7 @@ const Pets: React.FC = () => {
           setIsModalVisible(false);
           form.resetFields();
         }}
-        width="90%"
+        width="100%"
         style={{ maxWidth: 500 }}
       >
         <Form
@@ -202,10 +209,17 @@ const Pets: React.FC = () => {
               style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: 'Por favor, selecione a espécie' }]}
             >
-              <Select>
-                {speciesOptions.map(option => (
-                  <Option key={option.value} value={option.value}>
-                    {option.label}
+              <Select
+                placeholder="Selecione uma espécie"
+                optionLabelProp="label"
+              >
+                {species.map(specie => (
+                  <Option 
+                    key={specie.ID_especie} 
+                    value={specie.ID_especie}
+                    label={specie.especie}
+                  >
+                    {specie.especie}
                   </Option>
                 ))}
               </Select>
