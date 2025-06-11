@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined, IdcardOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
@@ -12,13 +12,27 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const onFinish = async (values: { name: string; email: string; password: string }) => {
+  const onFinish = async (values: {
+    nome: string;
+    telefone: string;
+    cpf: string;
+    email: string;
+    senha: string;
+    confirmarSenha: string;
+  }) => {
+    if (values.senha !== values.confirmarSenha) {
+      message.error('As senhas não coincidem!');
+      return;
+    }
+
     try {
       setLoading(true);
       await register({
-        name: values.name,
+        nome: values.nome,
+        telefone: values.telefone,
+        cpf: values.cpf,
         email: values.email,
-        password: values.password,
+        senha: values.senha
       });
       message.success('Cadastro realizado com sucesso!');
       navigate('/dashboard');
@@ -32,7 +46,7 @@ const Register: React.FC = () => {
   return (
     <div className="register-container">
       <Card className="register-card">
-        <Title level={2} style={{ textAlign: 'center', marginBottom: 30 }}>
+        <Title level={2} style={{ textAlign: 'center', marginBottom: 30, color: '#4CAF50' }}>
           Criar Conta
         </Title>
         <Form
@@ -41,12 +55,34 @@ const Register: React.FC = () => {
           autoComplete="off"
         >
           <Form.Item
-            name="name"
+            name="nome"
             rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}
           >
             <Input
               prefix={<UserOutlined />}
               placeholder="Nome"
+              size="large"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="telefone"
+            rules={[{ required: true, message: 'Por favor, insira seu telefone!' }]}
+          >
+            <Input
+              prefix={<PhoneOutlined />}
+              placeholder="Telefone"
+              size="large"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="cpf"
+            rules={[{ required: true, message: 'Por favor, insira seu CPF!' }]}
+          >
+            <Input
+              prefix={<IdcardOutlined />}
+              placeholder="CPF"
               size="large"
             />
           </Form.Item>
@@ -66,7 +102,7 @@ const Register: React.FC = () => {
           </Form.Item>
 
           <Form.Item
-            name="password"
+            name="senha"
             rules={[
               { required: true, message: 'Por favor, insira sua senha!' },
               { min: 6, message: 'A senha deve ter pelo menos 6 caracteres!' }
@@ -80,13 +116,13 @@ const Register: React.FC = () => {
           </Form.Item>
 
           <Form.Item
-            name="confirmPassword"
-            dependencies={['password']}
+            name="confirmarSenha"
+            dependencies={['senha']}
             rules={[
               { required: true, message: 'Por favor, confirme sua senha!' },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
+                  if (!value || getFieldValue('senha') === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error('As senhas não coincidem!'));

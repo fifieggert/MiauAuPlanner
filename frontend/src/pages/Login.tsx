@@ -12,10 +12,10 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const onFinish = async (values: { email: string; password: string }) => {
+  const onFinish = async (values: { email: string; senha: string }) => {
     try {
       setLoading(true);
-      await login(values.email, values.password);
+      await login(values.email, values.senha);
       message.success('Login realizado com sucesso!');
       navigate('/dashboard');
     } catch (error) {
@@ -53,7 +53,7 @@ const Login: React.FC = () => {
           </Form.Item>
 
           <Form.Item
-            name="password"
+            name="senha"
             rules={[{ required: true, message: 'Por favor, insira sua senha!' }]}
           >
             <Input.Password

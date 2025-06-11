@@ -1,12 +1,24 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User } from '../types';
+import { authService } from '../services/authService';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (userData: Omit<User, 'id'>) => Promise<void>;
+  register: (userData: {
+    nome: string;
+    telefone: string;
+    cpf: string;
+    email: string;
+    senha: string;
+  }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,43 +29,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Check if user is logged in on initial load
+    const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    if (token && storedUser) {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
     }
   }, []);
 
   const login = async (email: string, password: string) => {
-    // Fake login - accepts any email/password combination
-    const fakeUser: User = {
-      id: '1',
-      name: 'Usuário Teste',
-      email: email,
-      password: password
-    };
-    
-    setUser(fakeUser);
-    setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(fakeUser));
+    try {
+      const response = await authService.login(email, password);
+      const userData = {
+        id: response.usuario.ID_usuario,
+        name: response.usuario.nome,
+        email: response.usuario.email
+      };
+      
+      setUser(userData);
+      setIsAuthenticated(true);
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      throw new Error('Falha na autenticação');
+    }
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
   };
 
-  const register = async (userData: Omit<User, 'id'>) => {
-    // Fake registration
-    const fakeUser: User = {
-      id: '1',
-      ...userData
-    };
-    
-    setUser(fakeUser);
-    setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(fakeUser));
+  const register = async (userData: {
+    nome: string;
+    telefone: string;
+    cpf: string;
+    email: string;
+    senha: string;
+  }) => {
+    try {
+      await authService.register(userData);
+      // Após o registro, fazer login automaticamente
+      await login(userData.email, userData.senha);
+    } catch (error) {
+      throw new Error('Falha no registro');
+    }
   };
 
   return (
