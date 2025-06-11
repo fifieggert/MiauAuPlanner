@@ -3,7 +3,7 @@ import api from './api';
 export interface Pet {
   id: number;
   name: string;
-  species: string;
+  species: number;
   breed: string;
   age: number;
   weight: number;
@@ -11,12 +11,19 @@ export interface Pet {
   observations?: string;
 }
 
-
-
 export const animalService = {
   getAll: async () => {
     const response = await api.get('/animal');
-    return response.data;
+    return response.data.map((pet: any) => ({
+      id: pet.ID_animal,
+      name: pet.nome,
+      species: pet.id_especie,
+      breed: pet.raca,
+      age: pet.idade,
+      weight: pet.peso,
+      gender: pet.genero,
+      observations: pet.observacoes
+    }));
   },
 
   create: async (pet: Omit<Pet, 'id'>) => {
@@ -27,7 +34,8 @@ export const animalService = {
       genero: pet.gender,
       peso: pet.weight,
       id_usuario: 1, // TODO: Get from auth context
-      id_especie: pet.species, // Default to 'other' if species not found
+      id_especie: pet.species,
+      observacoes: pet.observations
     });
     return response.data;
   },
@@ -40,6 +48,7 @@ export const animalService = {
       genero: pet.gender,
       peso: pet.weight,
       id_especie: pet.species,
+      observacoes: pet.observations
     });
     return response.data;
   },
