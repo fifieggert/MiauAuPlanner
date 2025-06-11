@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Typography, Card, Modal, Form, Input, message } from 'antd';
+import { Table, Button, Modal, Form, Input, message, Card, Typography, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { userService, Usuario } from '../services/userService';
 
 const { Title } = Typography;
 
-interface Usuario {
-  id?: number;
-  nome: string;
-  telefone: string;
-  cpf: string;
-  email: string;
-}
-
 const Users: React.FC = () => {
-  const [users, setUsers] = useState<Usuario[]>(() => {
-    const savedUsers = localStorage.getItem('users');
-    return savedUsers ? JSON.parse(savedUsers) : [];
-  });
+  const [users, setUsers] = useState<Usuario[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingUser, setEditingUser] = useState<Usuario | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Salvar usuários no localStorage sempre que houver mudanças
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const data = await userService.findAll();
+      setUsers(data);
+    } catch (error) {
+      message.error('Erro ao carregar usuários');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(users));
-  }, [users]);
+    fetchUsers();
+  }, []);
 
   const handleAddUser = () => {
     setEditingUser(null);
@@ -34,42 +36,38 @@ const Users: React.FC = () => {
 
   const handleEditUser = (user: Usuario) => {
     setEditingUser(user);
-    form.setFieldsValue(user);
+    form.setFieldsValue({ ...user, senha: undefined });
     setIsModalVisible(true);
   };
 
-  const handleDeleteUser = (userId: number) => {
-    const updatedUsers = users.filter(user => user.id !== userId);
-    setUsers(updatedUsers);
-    message.success('Usuário excluído com sucesso!');
+  const handleDeleteUser = async (id: number) => {
+    try {
+      await userService.delete(id);
+      message.success('Usuário excluído com sucesso!');
+      fetchUsers();
+    } catch (error) {
+      message.error('Erro ao excluir usuário');
+    }
   };
 
-  const handleModalOk = () => {
-    form.validateFields().then(values => {
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields();
       if (editingUser) {
-        // Edição
-        setUsers(prevUsers => {
-          const updatedUsers = prevUsers.map(user => 
-            user.id === editingUser.id ? { ...user, ...values } : user
-          );
-          message.success('Usuário atualizado com sucesso!');
-          return updatedUsers;
-        });
+        const { senha, ...rest } = values;
+        const payload = senha ? values : rest;
+        await userService.update(editingUser.ID_usuario!, payload);
+        message.success('Usuário atualizado com sucesso!');
       } else {
-        // Cadastro
-        const newUser: Usuario = {
-          id: Date.now(),
-          ...values,
-        };
-        setUsers(prevUsers => {
-          const updatedUsers = [...prevUsers, newUser];
-          message.success('Usuário cadastrado com sucesso!');
-          return updatedUsers;
-        });
+        await userService.create(values);
+        message.success('Usuário cadastrado com sucesso!');
       }
       setIsModalVisible(false);
       form.resetFields();
-    });
+      fetchUsers();
+    } catch (error) {
+      message.error('Erro ao salvar usuário');
+    }
   };
 
   const columns = [
@@ -95,25 +93,27 @@ const Users: React.FC = () => {
     },
     {
       title: 'Ações',
-      key: 'actions',
+      key: 'acoes',
       render: (_: any, record: Usuario) => (
-        <Space size="middle">
-          <Button 
-            type="link" 
-            icon={<EditOutlined />} 
+        <>
+          <Button
+            type="link"
+            icon={<EditOutlined />}
             onClick={() => handleEditUser(record)}
           >
             Editar
           </Button>
-          <Button 
-            type="link" 
-            danger 
-            icon={<DeleteOutlined />}
-            onClick={() => handleDeleteUser(record.id!)}
+          <Popconfirm
+            title="Tem certeza que deseja excluir este usuário?"
+            onConfirm={() => handleDeleteUser(record.ID_usuario!)}
+            okText="Sim"
+            cancelText="Não"
           >
-            Excluir
-          </Button>
-        </Space>
+            <Button type="link" danger icon={<DeleteOutlined />}>
+              Excluir
+            </Button>
+          </Popconfirm>
+        </>
       ),
     },
   ];
@@ -130,7 +130,8 @@ const Users: React.FC = () => {
         <Table
           columns={columns}
           dataSource={users}
-          rowKey="id"
+          rowKey="ID_usuario"
+          loading={loading}
           pagination={{ pageSize: 10 }}
         />
       </Card>
@@ -182,6 +183,14 @@ const Users: React.FC = () => {
             ]}
           >
             <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="senha"
+            label="Senha"
+            rules={editingUser ? [] : [{ required: true, message: 'Por favor, insira a senha' }]}
+          >
+            <Input.Password autoComplete="new-password" />
           </Form.Item>
         </Form>
       </Modal>
