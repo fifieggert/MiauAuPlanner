@@ -5,10 +5,12 @@ import dayjs from 'dayjs';
 import { compromissoService, Compromisso } from '../services/compromissoService';
 import { animalService, Pet } from '../services/animalService';
 import { tipoCompromissoService, TipoCompromisso } from '../services/tipoCompromissoService';
+import { useAuth } from '../contexts/AuthContext';
 
 const { Title } = Typography;
 
 const Dashboard: React.FC = () => {
+  const { user } = useAuth();
   const [appointments, setAppointments] = useState<Compromisso[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
   const [tipos, setTipos] = useState<TipoCompromisso[]>([]);
@@ -22,13 +24,18 @@ const Dashboard: React.FC = () => {
           animalService.getAll(),
           tipoCompromissoService.getAll()
         ]);
-        console.log('Dados recebidos do backend:', {
-          appointments: appointmentsData,
-          pets: petsData,
-          tipos: tiposData
-        });
-        setAppointments(appointmentsData);
-        setPets(petsData);
+
+        // Filtrar pets pelo usuário logado
+        const userPets = petsData.filter((pet: Pet) => pet.id_usuario === user?.id);
+        setPets(userPets);
+
+        // Filtrar compromissos que pertencem aos pets do usuário
+        const userPetIds = userPets.map(pet => pet.id);
+        const userAppointments = appointmentsData.filter(
+          (appointment: Compromisso) => userPetIds.includes(appointment.ID_animal)
+        );
+        setAppointments(userAppointments);
+        
         setTipos(tiposData);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
@@ -38,7 +45,7 @@ const Dashboard: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [user?.id]);
 
   // Get today's appointments
   const todayAppointments = appointments.filter(appointment => {

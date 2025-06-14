@@ -3,13 +3,17 @@ import { Table, Button, Space, Typography, Card, Modal, Form, Input, InputNumber
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { animalService, Pet } from '../services/animalService';
 import { speciesService, Species } from '../services/speciesService';
+import { userService, Usuario } from '../services/userService';
+import { useAuth } from '../contexts/AuthContext';
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const Pets: React.FC = () => {
+  const { user } = useAuth();
   const [pets, setPets] = useState<Pet[]>([]);
   const [species, setSpecies] = useState<Species[]>([]);
+  const [users, setUsers] = useState<Usuario[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
@@ -19,7 +23,9 @@ const Pets: React.FC = () => {
     try {
       setLoading(true);
       const data = await animalService.getAll();
-      setPets(data);
+      // Filtrar pets pelo usuário logado
+      const userPets = data.filter((pet: any) => pet.id_usuario === user?.id);
+      setPets(userPets);
     } catch (error) {
       message.error('Erro ao carregar pets');
     } finally {
@@ -36,9 +42,19 @@ const Pets: React.FC = () => {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const data = await userService.findAll();
+      setUsers(data);
+    } catch (error) {
+      message.error('Erro ao carregar usuários');
+    }
+  };
+
   useEffect(() => {
     fetchPets();
     fetchSpecies();
+    fetchUsers();
   }, []);
 
   const handleAddPet = () => {
@@ -56,7 +72,8 @@ const Pets: React.FC = () => {
       age: pet.age,
       weight: pet.weight,
       gender: pet.gender,
-      observations: pet.observations
+      observations: pet.observations,
+      id_usuario: pet.id_usuario
     });
     setIsModalVisible(true);
   };
@@ -94,6 +111,11 @@ const Pets: React.FC = () => {
     return speciesObj ? speciesObj.especie : 'Espécie não encontrada';
   };
 
+  const getUserName = (userId: number) => {
+    const userObj = users.find(u => u.ID_usuario === userId);
+    return userObj ? userObj.nome : 'Usuário não encontrado';
+  };
+
   const columns = [
     {
       title: 'Nome',
@@ -107,17 +129,6 @@ const Pets: React.FC = () => {
       render: (speciesId: number) => getSpeciesName(speciesId),
     },
     {
-      title: 'Raça',
-      dataIndex: 'breed',
-      key: 'breed',
-    },
-    {
-      title: 'Idade',
-      dataIndex: 'age',
-      key: 'age',
-      render: (age: number) => `${age} anos`,
-    },
-    {
       title: 'Peso',
       dataIndex: 'weight',
       key: 'weight',
@@ -127,6 +138,12 @@ const Pets: React.FC = () => {
       title: 'Gênero',
       dataIndex: 'gender',
       key: 'gender',
+    },
+    {
+      title: 'Tutor',
+      dataIndex: 'id_usuario',
+      key: 'tutor',
+      render: (userId: number) => getUserName(userId),
     },
     {
       title: 'Ações',
@@ -168,14 +185,15 @@ const Pets: React.FC = () => {
           rowKey="id"
           loading={loading}
           pagination={{ 
-            pageSize: 10,
+            pageSize: 15,
             showSizeChanger: true,
             showTotal: (total) => `Total ${total} itens`,
             responsive: true,
-            size: 'small'
+            size: 'default'
           }}
           scroll={{ x: 'max-content' }}
-          size="small"
+          size="middle"
+          style={{ marginTop: 16 }}
         />
       </Card>
 
@@ -188,19 +206,44 @@ const Pets: React.FC = () => {
           form.resetFields();
         }}
         width="100%"
-        style={{ maxWidth: 500 }}
+        style={{ maxWidth: 600 }}
       >
         <Form
           form={form}
           layout="vertical"
         >
-          <Form.Item
-            name="name"
-            label="Nome"
-            rules={[{ required: true, message: 'Por favor, insira o nome do pet' }]}
-          >
-            <Input />
-          </Form.Item>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <Form.Item
+              name="name"
+              label="Nome"
+              style={{ flex: '1 1 200px' }}
+              rules={[{ required: true, message: 'Por favor, insira o nome do pet' }]}
+            >
+              <Input placeholder="Nome" />
+            </Form.Item>
+
+            <Form.Item
+              name="id_usuario"
+              label="Tutor"
+              style={{ flex: '1 1 200px' }}
+              rules={[{ required: true, message: 'Por favor, selecione o tutor' }]}
+            >
+              <Select
+                placeholder="Selecione"
+                optionLabelProp="label"
+              >
+                {users.map(user => (
+                  <Option 
+                    key={user.ID_usuario} 
+                    value={user.ID_usuario}
+                    label={user.nome}
+                  >
+                    {user.nome}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </div>
 
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <Form.Item
@@ -210,7 +253,7 @@ const Pets: React.FC = () => {
               rules={[{ required: true, message: 'Por favor, selecione a espécie' }]}
             >
               <Select
-                placeholder="Selecione uma espécie"
+                placeholder="Selecione"
                 optionLabelProp="label"
               >
                 {species.map(specie => (
@@ -231,46 +274,45 @@ const Pets: React.FC = () => {
               style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: 'Por favor, insira a raça' }]}
             >
-              <Input />
+              <Input placeholder="Raça" />
             </Form.Item>
           </div>
 
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <Form.Item
-              name="age"
+              name="age" 
               label="Idade"
-              style={{ flex: '1 1 200px' }}
+              style={{ flex: '1 1 150px' }}
               rules={[{ required: true, message: 'Por favor, insira a idade' }]}
             >
-              <InputNumber min={0} style={{ width: '100%' }} />
+              <InputNumber defaultValue={0} min={0} style={{ width: '100%' }}  />
             </Form.Item>
-
             <Form.Item
               name="weight"
               label="Peso (kg)"
-              style={{ flex: '1 1 200px' }}
+              style={{ flex: '1 1 150px' }}
               rules={[{ required: true, message: 'Por favor, insira o peso' }]}
             >
               <InputNumber min={0} step={0.1} style={{ width: '100%' }} />
             </Form.Item>
+            <Form.Item
+              name="gender"
+              label="Gênero"
+              style={{ flex: '1 1 150px' }}
+              rules={[{ required: true, message: 'Por favor, selecione o gênero' }]}
+            >
+              <Select placeholder="Selecione">
+                <Option value="M">Macho</Option>
+                <Option value="F">Fêmea</Option>
+              </Select>
+            </Form.Item>
           </div>
-
-          <Form.Item
-            name="gender"
-            label="Gênero"
-            rules={[{ required: true, message: 'Por favor, selecione o gênero' }]}
-          >
-            <Select>
-              <Option value="M">Macho</Option>
-              <Option value="F">Fêmea</Option>
-            </Select>
-          </Form.Item>
 
           <Form.Item
             name="observations"
             label="Observações"
           >
-            <Input.TextArea rows={4} />
+            <Input.TextArea rows={4} placeholder="Observações" />
           </Form.Item>
         </Form>
       </Modal>

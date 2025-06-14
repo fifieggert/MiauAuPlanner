@@ -1,4 +1,5 @@
 import api from './api';
+import { useAuth } from '../contexts/AuthContext';
 
 export interface Pet {
   id: number;
@@ -8,6 +9,7 @@ export interface Pet {
   age: number;
   weight: number;
   gender: string;
+  id_usuario: number;
   observations?: string;
 }
 
@@ -22,18 +24,24 @@ export const animalService = {
       age: pet.idade,
       weight: pet.peso,
       gender: pet.genero,
+      id_usuario: pet.id_usuario,
       observations: pet.observacoes
     }));
   },
 
   create: async (pet: Omit<Pet, 'id'>) => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!user.id) {
+      throw new Error('Usuário não autenticado');
+    }
+
     const response = await api.post('/animal', {
       nome: pet.name,
       raca: pet.breed,
       idade: pet.age,
       genero: pet.gender,
       peso: pet.weight,
-      id_usuario: 1, // TODO: Get from auth context
+      id_usuario: user.id,
       id_especie: pet.species,
       observacoes: pet.observations
     });
@@ -47,14 +55,14 @@ export const animalService = {
       idade: pet.age,
       genero: pet.gender,
       peso: pet.weight,
+      id_usuario: pet.id_usuario,
       id_especie: pet.species,
       observacoes: pet.observations
     });
     return response.data;
   },
 
-  delete: async (id: number) => {
-    const response = await api.delete(`/animal/${id}`);
-    return response.data;
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/animal/${id}`);
   },
 }; 

@@ -5,11 +5,13 @@ import dayjs from 'dayjs';
 import { compromissoService, Compromisso } from '../services/compromissoService';
 import { animalService, Pet } from '../services/animalService';
 import { tipoCompromissoService, TipoCompromisso } from '../services/tipoCompromissoService';
+import { useAuth } from '../contexts/AuthContext';
 
 const { Option } = Select;
 const { Title } = Typography;
 
 const Appointments: React.FC = () => {
+  const { user } = useAuth();
   const [appointments, setAppointments] = useState<Compromisso[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
   const [tipos, setTipos] = useState<TipoCompromisso[]>([]);
@@ -22,7 +24,12 @@ const Appointments: React.FC = () => {
     try {
       setLoading(true);
       const data = await compromissoService.getAll();
-      setAppointments(data);
+      const userPets = pets.filter(pet => pet.id_usuario === user?.id);
+      const userPetIds = userPets.map(pet => pet.id);
+      const filteredAppointments = data.filter(appointment => 
+        userPetIds.includes(appointment.ID_animal)
+      );
+      setAppointments(filteredAppointments);
     } catch (error) {
       message.error('Erro ao carregar agendamentos');
     } finally {
@@ -110,7 +117,7 @@ const Appointments: React.FC = () => {
   };
 
   const getPetName = (petId: number) => {
-    const pet = pets.find(p => p.id === petId);
+    const pet = pets.find(p => p.id === petId && p.id_usuario === user?.id);
     return pet ? pet.name : 'Pet não encontrado';
   };
 
@@ -252,7 +259,7 @@ const Appointments: React.FC = () => {
                 rules={[{ required: true, message: 'Por favor, selecione o pet' }]}
               >
                 <Select>
-                  {pets.map(pet => (
+                  {pets.filter(pet => pet.id_usuario === user?.id).map(pet => (
                     <Option key={pet.id} value={pet.id}>
                       {pet.name}
                     </Option>
