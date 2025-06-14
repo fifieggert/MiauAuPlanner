@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Especie } from '../types/Especie';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://localhost:3000/api';
 
 export const especiesService = {
   // Get all species

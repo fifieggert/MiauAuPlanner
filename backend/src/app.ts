@@ -8,6 +8,7 @@ import historicoRouter from './routes/historicoRoutes'
 import compromissosRouter from './routes/compromissosRoutes'
 import catalogoRouter from './routes/catalogoVacinasRoutes'
 import VacinasAplicadasRouter from './routes/vacinasAplicadasRoutes'
+import tipoCompromissoRouter from './routes/tipoCompromissoRoutes'
 import loginRoutes from './routes/loginRoutes'
 
 const app = express();
@@ -15,16 +16,18 @@ const cors = require ( "cors" );
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", loginRoutes);
 
-app.use(userRouter);
-app.use(animalRouter);
-app.use(especieRouter);
-app.use(alergiaRouter);
-app.use(historicoRouter);
-app.use(compromissosRouter);
-app.use(catalogoRouter);
-app.use(VacinasAplicadasRouter)
+// Configurando todas as rotas com o prefixo /api
+app.use('/api', userRouter);
+app.use('/api', animalRouter);
+app.use('/api', especieRouter);
+app.use('/api', alergiaRouter);
+app.use('/api', historicoRouter);
+app.use('/api', compromissosRouter);
+app.use('/api', catalogoRouter);
+app.use('/api', VacinasAplicadasRouter);
+app.use('/api', tipoCompromissoRouter);
+app.use('/api', loginRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

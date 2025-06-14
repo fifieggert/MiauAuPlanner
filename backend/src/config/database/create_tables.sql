@@ -63,11 +63,44 @@ CREATE TABLE IF NOT EXISTS historico (
     FOREIGN KEY (ID_animal) REFERENCES animal(ID_animal)
 );
 
--- Criação da tabela compromissos
+-- Criação da tabela tipo_compromisso
+CREATE TABLE IF NOT EXISTS tipo_compromisso (
+    ID_tipo INT AUTO_INCREMENT PRIMARY KEY,
+    nome_tipo VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Inserção dos tipos de compromisso predefinidos
+INSERT INTO tipo_compromisso (nome_tipo) VALUES
+    ('Consulta Veterinária'),
+    ('Vacinação'),
+    ('Banho'),
+    ('Tosa'),
+    ('Adestramento'),
+    ('Passeio'),
+    ('Check-up de rotina'),
+    ('Emergência veterinária'),
+    ('Consulta com nutricionista pet'),
+    ('Fisioterapia animal'),
+    ('Acupuntura veterinária'),
+    ('Consulta com especialista (dermatologista, ortopedista, etc.)'),
+    ('Aplicação de vermífugo'),
+    ('Aplicação de antipulgas/carrapaticida'),
+    ('Sessão de socialização'),
+    ('Creche para pets'),
+    ('Hospedagem pet'),
+    ('Avaliação comportamental'),
+    ('Revisão odontológica'),
+    ('Consulta para animais idosos');
+
+-- Modificação da tabela compromissos
+DROP TABLE IF EXISTS compromissos;
 CREATE TABLE IF NOT EXISTS compromissos (
     ID_compromissos INT AUTO_INCREMENT PRIMARY KEY,
-    data_compromissos DATETIME NOT NULL,
+    data_compromissos DATE NOT NULL,
+    horario_compromissos TIME NOT NULL,
     ID_animal INT NOT NULL,
+    ID_tipo INT NOT NULL,
     observacoes TEXT NOT NULL,
-    FOREIGN KEY (ID_animal) REFERENCES animal(ID_animal)
+    FOREIGN KEY (ID_animal) REFERENCES animal(ID_animal),
+    FOREIGN KEY (ID_tipo) REFERENCES tipo_compromisso(ID_tipo)
 ); 

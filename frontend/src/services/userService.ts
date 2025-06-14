@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000'; // This is the correct URL that works in Insomnia
+const API_URL = 'http://localhost:3000/api';
 
 export interface Usuario {
   ID_usuario?: number;
