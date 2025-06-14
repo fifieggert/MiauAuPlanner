@@ -7,6 +7,97 @@ Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para gara
 - Graziela Torres
 - Sophia Eggert Freire da Rocha
 
+## Funcionalidades Implementadas
+
+### 1. **Autenticação e Usuários** 🔐
+   - Login e registro de usuários
+   - Proteção de rotas autenticadas
+   - Gerenciamento de sessão com JWT
+
+### 2. **Gerenciamento de Pets** 🐱
+   - Cadastro de pets com informações básicas
+   - Listagem de pets cadastrados
+   - Registro de alergias e condições especiais no campo de observações
+
+### 3. **Agenda de Cuidados** 📅
+   - Dashboard com compromissos do dia
+   - Visualização dos próximos 3 agendamentos
+   - Categorização de compromissos por tipo
+   - Sistema de tags coloridas para diferentes tipos de compromissos
+
+### 4. **Catálogo de Espécies** 🐾
+   - Lista pré-definida de tipos de animais
+   - Categorização de pets por espécie
+
+## Tecnologias Utilizadas
+
+### Back-end
+- Node.js com Express.js
+- TypeScript
+- MySQL com Prisma ORM
+- JWT para autenticação
+- Swagger para documentação da API
+
+### Front-end
+- React.js com TypeScript
+- Ant Design para interface
+- React Router para navegação
+- Context API para gerenciamento de estado
+- Axios para requisições HTTP
+
+## Arquitetura
+
+O projeto segue os princípios da Clean Architecture com uma estrutura monolítica, dividida em:
+
+- **Apresentação**: Front-end em React.js
+- **Aplicação**: Back-end em Node.js + Express.js
+- **Domínio**: Modelos de dados e regras de negócio
+- **Infraestrutura**: MySQL com Prisma ORM
+
+## Como Executar o Projeto
+
+1. **Clone o repositório**:
+   ```bash
+   git clone https://github.com/fifieggert/MiauAuPlanner.git
+   cd MiauAuPlanner
+   ```
+
+2. **Instale as dependências do Back-end**:
+   ```bash
+   cd backend
+   npm install
+   ```
+
+3. **Instale as dependências do Front-end**:
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+
+4. **Configure o banco de dados**:
+   - Crie um banco MySQL
+   - Configure as variáveis de ambiente no arquivo `.env`
+
+5. **Execute o Back-end**:
+   ```bash
+   cd backend
+   npm run dev
+   ```
+
+6. **Execute o Front-end**:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+## Documentação da API
+
+A documentação da API está disponível através do Swagger UI em:
+- Desenvolvimento: `http://localhost:3000/docs`
+
+## Board de Atividades
+https://trello.com/invite/b/67bcf463ecf24beaec769b41/ATTI839176f597a349ef761a366be09729fe79957083/miauauplanner-desenvolviment
+
 ## Requisitos Funcionais
 
 - **RF01: Cadastro e Autenticação de Usuários**  
@@ -29,15 +120,13 @@ Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para gara
 - **RF05: Edição e Exclusão de Cadastros**  
   - Permitir a edição e exclusão dos cadastros de usuários e pets, garantindo que as alterações sejam refletidas no histórico.
 
-- **RF06: Criação de Lembretes**  
-  - Permitir a criação de lembretes para eventos futuros (banhos, consultas e vacinas).  
-  - Disponibilizar notificações via e-mail ou alertas internos, conforme configurado pelo usuário.
+- **RF06: Dashboard com Compromissos**  
+  - Visualização dos agendamentos do dia atual
+  - Lista dos próximos 3 agendamentos futuros
+  - Exibição do tipo de compromisso, horário e pet
+  - Tags coloridas para identificar o tipo de compromisso
+  - Observações visíveis para cada agendamento
 
-- **RF07: Registro Detalhado de Vacinas**  
-  - Manter um registro detalhado das vacinas aplicadas, com data de aplicação, dose e data prevista para reforço (quando aplicável).
-
-- **RF08: Dashboard e Visualização Resumida**  
-  - Oferecer um dashboard onde o usuário possa visualizar um resumo das informações, como próximos lembretes, histórico recente e dados dos pets.
 
 ## Requisitos Não Funcionais
 
@@ -58,7 +147,7 @@ Seja para cães, gatos ou outros pets, o MiauAuPlanner é o seu aliado para gara
 
 ## Arquitetura 
 
-Clean Architecture + MVC + Arquitetura monolítica 
+Clean Architecture + Arquitetura monolítica 
 https://danvitoriano.medium.com/clean-architecture-a35688308e29
 
 ## Camadas principais:
@@ -75,7 +164,7 @@ https://danvitoriano.medium.com/clean-architecture-a35688308e29
  - Autenticação: JWT
 
 ## Front-end (React.js)
- - Biblioteca UI: https://ui.shadcn.com/
+ - Biblioteca UI: Ant Design
  - Gerenciamento de Estado: Context API
  - Comunicação com API: Axios
  - Autenticação: Context + JWT Storage (LocalStorage)
@@ -84,9 +173,6 @@ https://danvitoriano.medium.com/clean-architecture-a35688308e29
 ## Board de atividades
 https://trello.com/invite/b/67bcf463ecf24beaec769b41/ATTI839176f597a349ef761a366be09729fe79957083/miauauplanner-desenvolviment
 
-
-
-## Funcionalidades Principais
 
 ### 1. **Cadastro de Pets** 🐱
    - **Informações Básicas:** Nome, idade, raça, espécie (cachorro, gato, etc.), peso e foto.

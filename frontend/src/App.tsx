@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import ptBR from 'antd/locale/pt_BR';
 import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -27,13 +28,49 @@ const App: React.FC = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route element={<AppLayout children={undefined} />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/pets" element={<Pets />} />
-              <Route path="/users" element={<Users />} />
-              <Route path="/appointments" element={<Appointments />} />
-              <Route path="/species" element={<Species />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/pets" 
+                element={
+                  <ProtectedRoute>
+                    <Pets />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/users" 
+                element={
+                  <ProtectedRoute>
+                    <Users />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/appointments" 
+                element={
+                  <ProtectedRoute>
+                    <Appointments />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/species" 
+                element={
+                  <ProtectedRoute>
+                    <Species />
+                  </ProtectedRoute>
+                } 
+              />
             </Route>
           </Routes>
         </Router>
