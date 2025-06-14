@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, DatePicker, TimePicker, Select, message, Row, Col, Card, Typography, Space } from 'antd';
+import { Table, Button, Modal, Form, Input, DatePicker, Select, message, Row, Col, Card, Typography, Space } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { compromissoService, Compromisso } from '../services/compromissoService';
 import { animalService, Pet } from '../services/animalService';
-import { useAuth } from '../contexts/AuthContext';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -16,7 +15,6 @@ const Appointments: React.FC = () => {
   const [form] = Form.useForm();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
 
   const fetchAppointments = async () => {
     try {

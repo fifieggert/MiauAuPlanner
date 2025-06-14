@@ -2,11 +2,14 @@
   /* Cores */
   --primary-color: #4CAF50;
   --primary-light: #E8F5E9;
-  --text-primary: #212121;
-  --text-secondary: #757575;
-  --border-color: #f0f0f0;
-  --background-light: #F7F9FA;
+  --primary-pastel: #A5D6A7;
+  --text-primary: #2C3E50;
+  --text-secondary: #7F8C8D;
+  --border-color: #E0E0E0;
+  --background-light: #F5F7FA;
   --white: #fff;
+  --card-background: #FAFBFC;
+  --hover-background: #F0F4F8;
 
   /* Espaçamentos */
   --spacing-xs: 0.25rem;    /* 4px */
@@ -51,7 +54,7 @@ body, html, #root {
 
 /* Sidebar */
 .app-sider {
-  background: var(--white) !important;
+  background: var(--card-background) !important;
   box-shadow: var(--shadow-sm);
   position: fixed;
   height: 100vh;
@@ -68,6 +71,7 @@ body, html, #root {
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid var(--border-color);
+  background: var(--primary-light);
 }
 
 .logo-text {
@@ -78,7 +82,7 @@ body, html, #root {
 
 /* Header */
 .app-header {
-  background: var(--white) !important;
+  background: var(--card-background) !important;
   padding: 0 var(--spacing-lg) !important;
   display: flex;
   align-items: center;
@@ -99,7 +103,7 @@ body, html, #root {
 }
 
 .trigger-button:hover {
-  color: var(--primary-color);
+  color: var(--primary-pastel);
 }
 
 .user-welcome {
@@ -112,7 +116,7 @@ body, html, #root {
 .app-content {
   margin: var(--spacing-lg);
   padding: var(--spacing-lg);
-  background: var(--white);
+  background: var(--card-background);
   border-radius: 0.5rem;
   min-height: calc(100vh - var(--header-height) * 2);
   box-shadow: var(--shadow-sm);
@@ -122,6 +126,7 @@ body, html, #root {
 /* Menu */
 .ant-menu {
   border-right: none !important;
+  background: var(--card-background) !important;
 }
 
 .ant-menu-item {
@@ -129,6 +134,7 @@ body, html, #root {
   padding: 0 var(--spacing-md) !important;
   height: var(--menu-item-height) !important;
   line-height: var(--menu-item-height) !important;
+  background: var(--card-background) !important;
 }
 
 .ant-menu-item-selected {
@@ -140,7 +146,7 @@ body, html, #root {
 }
 
 .ant-menu-item:hover {
-  background-color: var(--background-light) !important;
+  background-color: var(--hover-background) !important;
 }
 
 /* Mobile Navigation */
@@ -160,7 +166,7 @@ body, html, #root {
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--white);
+  background: var(--card-background);
   box-shadow: var(--shadow-sm);
   z-index: 1000;
 }
