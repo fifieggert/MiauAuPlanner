@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, DatePicker, Select, message, Row, Col, Card, Typography, Space } from 'antd';
+import { Table, Button, Modal, Form, Input, DatePicker, Select, message, Row, Col, Card, Typography, Space, TimePicker } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { compromissoService, Compromisso } from '../services/compromissoService';
 import { animalService, Pet } from '../services/animalService';
+import { tipoCompromissoService, TipoCompromisso } from '../services/tipoCompromissoService';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -11,6 +12,7 @@ const { Title } = Typography;
 const Appointments: React.FC = () => {
   const [appointments, setAppointments] = useState<Compromisso[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
+  const [tipos, setTipos] = useState<TipoCompromisso[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -37,20 +39,32 @@ const Appointments: React.FC = () => {
     }
   };
 
+  const fetchTipos = async () => {
+    try {
+      const data = await tipoCompromissoService.getAll();
+      setTipos(data);
+    } catch (error) {
+      message.error('Erro ao carregar tipos de compromisso');
+    }
+  };
+
   useEffect(() => {
     fetchAppointments();
     fetchPets();
+    fetchTipos();
   }, []);
 
   const handleCreate = async (values: any) => {
     try {
       const compromissoData = {
         data_compromissos: values.date.format('YYYY-MM-DD'),
+        horario_compromissos: values.time.format('HH:mm'),
         ID_animal: Number(values.petId),
+        ID_tipo: Number(values.tipoId),
         observacoes: values.notes || ''
       };
 
-      if (!compromissoData.data_compromissos || !compromissoData.ID_animal) {
+      if (!compromissoData.data_compromissos || !compromissoData.horario_compromissos || !compromissoData.ID_animal || !compromissoData.ID_tipo) {
         message.error('Por favor, preencha todos os campos obrigatórios');
         return;
       }
@@ -74,10 +88,12 @@ const Appointments: React.FC = () => {
   };
 
   const handleEdit = (record: Compromisso) => {
-    setEditingId(record.ID_compromisso!);
+    setEditingId(record.ID_compromissos!);
     form.setFieldsValue({
       date: dayjs(record.data_compromissos),
+      time: dayjs(record.horario_compromissos, 'HH:mm'),
       petId: record.ID_animal,
+      tipoId: record.ID_tipo,
       notes: record.observacoes
     });
     setIsModalVisible(true);
@@ -98,6 +114,11 @@ const Appointments: React.FC = () => {
     return pet ? pet.name : 'Pet não encontrado';
   };
 
+  const getTipoName = (tipoId: number) => {
+    const tipo = tipos.find(t => t.ID_tipo === tipoId);
+    return tipo ? tipo.nome_tipo : 'Tipo não encontrado';
+  };
+
   const columns = [
     {
       title: 'Data',
@@ -106,10 +127,21 @@ const Appointments: React.FC = () => {
       render: (date: string) => dayjs(date).format('DD/MM/YYYY'),
     },
     {
+      title: 'Hora',
+      dataIndex: 'horario_compromissos',
+      key: 'horario_compromissos',
+    },
+    {
       title: 'Pet',
       dataIndex: 'ID_animal',
       key: 'pet',
       render: (petId: number) => getPetName(petId),
+    },
+    {
+      title: 'Tipo',
+      dataIndex: 'ID_tipo',
+      key: 'tipo',
+      render: (tipoId: number) => getTipoName(tipoId),
     },
     {
       title: 'Observações',
@@ -132,7 +164,7 @@ const Appointments: React.FC = () => {
             type="link"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record.ID_compromisso!)}
+            onClick={() => handleDelete(record.ID_compromissos!)}
           >
             Excluir
           </Button>
@@ -162,7 +194,7 @@ const Appointments: React.FC = () => {
         <Table
           columns={columns}
           dataSource={appointments}
-          rowKey="ID_compromisso"
+          rowKey="ID_compromissos"
           loading={loading}
           pagination={{
             pageSize: 10,
@@ -185,16 +217,14 @@ const Appointments: React.FC = () => {
           setEditingId(null);
         }}
         onOk={() => form.submit()}
-        width="100%"
-        style={{ maxWidth: 500 }}
       >
         <Form
           form={form}
           layout="vertical"
           onFinish={handleCreate}
         >
-          <Row gutter={16}>
-            <Col span={24}>
+          <Row gutter={[16, 0]}>
+            <Col span={12}>
               <Form.Item
                 name="date"
                 label="Data"
@@ -203,10 +233,19 @@ const Appointments: React.FC = () => {
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
             </Col>
+            <Col span={12}>
+              <Form.Item
+                name="time"
+                label="Hora"
+                rules={[{ required: true, message: 'Por favor, selecione a hora' }]}
+              >
+                <TimePicker style={{ width: '100%' }} format="HH:mm" />
+              </Form.Item>
+            </Col>
           </Row>
 
-          <Row gutter={16}>
-            <Col span={24}>
+          <Row gutter={[16, 0]}>
+            <Col span={12}>
               <Form.Item
                 name="petId"
                 label="Pet"
@@ -216,6 +255,21 @@ const Appointments: React.FC = () => {
                   {pets.map(pet => (
                     <Option key={pet.id} value={pet.id}>
                       {pet.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="tipoId"
+                label="Tipo"
+                rules={[{ required: true, message: 'Por favor, selecione o tipo' }]}
+              >
+                <Select>
+                  {tipos.map(tipo => (
+                    <Option key={tipo.ID_tipo} value={tipo.ID_tipo}>
+                      {tipo.nome_tipo}
                     </Option>
                   ))}
                 </Select>

@@ -10,7 +10,6 @@
 .login-card {
   width: 100%;
   max-width: 400px;
-  padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   background: var(--card-background);
@@ -35,9 +34,7 @@
 }
 
 @media (max-width: 480px) {
-  .login-container {
-    padding: 12px;
-  }
+
   
   .login-card {
     padding: 12px;

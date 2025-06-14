@@ -1,9 +1,11 @@
 import api from './api';
 
 export interface Compromisso {
-  ID_compromisso?: number;
+  ID_compromissos?: number;
   data_compromissos: string;
+  horario_compromissos: string;
   ID_animal: number;
+  ID_tipo: number;
   observacoes: string;
 }
 
@@ -13,7 +15,7 @@ export const compromissoService = {
     return response.data;
   },
 
-  create: async (compromisso: Omit<Compromisso, 'ID_compromisso'>): Promise<Compromisso> => {
+  create: async (compromisso: Omit<Compromisso, 'ID_compromissos'>): Promise<Compromisso> => {
     const response = await api.post('/compromisso', compromisso);
     return response.data;
   },

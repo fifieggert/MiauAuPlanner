@@ -4,23 +4,32 @@ import { CalendarOutlined, TeamOutlined, ClockCircleOutlined } from '@ant-design
 import dayjs from 'dayjs';
 import { compromissoService, Compromisso } from '../services/compromissoService';
 import { animalService, Pet } from '../services/animalService';
+import { tipoCompromissoService, TipoCompromisso } from '../services/tipoCompromissoService';
 
 const { Title } = Typography;
 
 const Dashboard: React.FC = () => {
   const [appointments, setAppointments] = useState<Compromisso[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
+  const [tipos, setTipos] = useState<TipoCompromisso[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [appointmentsData, petsData] = await Promise.all([
+        const [appointmentsData, petsData, tiposData] = await Promise.all([
           compromissoService.getAll(),
-          animalService.getAll()
+          animalService.getAll(),
+          tipoCompromissoService.getAll()
         ]);
+        console.log('Dados recebidos do backend:', {
+          appointments: appointmentsData,
+          pets: petsData,
+          tipos: tiposData
+        });
         setAppointments(appointmentsData);
         setPets(petsData);
+        setTipos(tiposData);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
       } finally {
@@ -36,18 +45,33 @@ const Dashboard: React.FC = () => {
     const appointmentDate = dayjs(appointment.data_compromissos);
     const today = dayjs();
     return appointmentDate.isSame(today, 'day');
-  });
+  }).sort((a, b) => a.horario_compromissos.localeCompare(b.horario_compromissos));
 
   // Get upcoming appointments (excluding today)
-  const upcomingAppointments = appointments.filter(appointment => {
-    const appointmentDate = dayjs(appointment.data_compromissos);
-    const today = dayjs();
-    return appointmentDate.isAfter(today, 'day');
-  }).slice(0, 3); // Show only next 3 appointments
+  const upcomingAppointments = appointments
+    .filter(appointment => {
+      const appointmentDate = dayjs(appointment.data_compromissos);
+      const today = dayjs().startOf('day');
+      return appointmentDate.isAfter(today);
+    })
+    .sort((a, b) => {
+      const dateA = dayjs(`${a.data_compromissos} ${a.horario_compromissos}`);
+      const dateB = dayjs(`${b.data_compromissos} ${b.horario_compromissos}`);
+      return dateA.diff(dateB);
+    })
+    .slice(0, 3); // Show only next 3 appointments
+
+  console.log('Today:', todayAppointments);
+  console.log('Upcoming:', upcomingAppointments);
 
   const getPetName = (petId: number) => {
     const pet = pets.find(p => p.id === petId);
     return pet ? pet.name : 'Pet não encontrado';
+  };
+
+  const getTipoName = (tipoId: number) => {
+    const tipo = tipos.find(t => t.ID_tipo === tipoId);
+    return tipo ? tipo.nome_tipo : 'Tipo não encontrado';
   };
 
   if (loading) {
@@ -82,17 +106,20 @@ const Dashboard: React.FC = () => {
             {todayAppointments.length > 0 ? (
               <ul className="dashboard-list">
                 {todayAppointments.map(appointment => (
-                  <li key={appointment.ID_compromisso}>
+                  <li key={appointment.ID_compromissos}>
                     <ClockCircleOutlined style={{ marginRight: 8 }} />
                     <span style={{ fontWeight: 500 }}>
-                      {dayjs(appointment.data_compromissos).format('HH:mm')}
+                      {appointment.horario_compromissos}
                     </span>
                     <span style={{ margin: '0 8px' }}>-</span>
                     <span style={{ color: 'var(--text-primary)' }}>
                       {getPetName(appointment.ID_animal)}
                     </span>
+                    <Tag color="blue" style={{ marginLeft: 8 }}>
+                      {getTipoName(appointment.ID_tipo)}
+                    </Tag>
                     {appointment.observacoes && (
-                      <Tag color="blue" style={{ marginLeft: 8 }}>
+                      <Tag color="green" style={{ marginLeft: 8 }}>
                         {appointment.observacoes}
                       </Tag>
                     )}
@@ -113,17 +140,20 @@ const Dashboard: React.FC = () => {
             {upcomingAppointments.length > 0 ? (
               <ul className="dashboard-list">
                 {upcomingAppointments.map(appointment => (
-                  <li key={appointment.ID_compromisso}>
+                  <li key={appointment.ID_compromissos}>
                     <ClockCircleOutlined style={{ marginRight: 8 }} />
                     <span style={{ fontWeight: 500 }}>
-                      {dayjs(appointment.data_compromissos).format('DD/MM')} às {dayjs(appointment.data_compromissos).format('HH:mm')}
+                      {dayjs(appointment.data_compromissos).format('DD/MM')} às {appointment.horario_compromissos}
                     </span>
                     <span style={{ margin: '0 8px' }}>-</span>
                     <span style={{ color: 'var(--text-primary)' }}>
                       {getPetName(appointment.ID_animal)}
                     </span>
+                    <Tag color="blue" style={{ marginLeft: 8 }}>
+                      {getTipoName(appointment.ID_tipo)}
+                    </Tag>
                     {appointment.observacoes && (
-                      <Tag color="blue" style={{ marginLeft: 8 }}>
+                      <Tag color="green" style={{ marginLeft: 8 }}>
                         {appointment.observacoes}
                       </Tag>
                     )}

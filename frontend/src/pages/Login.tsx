@@ -60,18 +60,13 @@ const Login: React.FC = () => {
               prefix={<LockOutlined />}
               placeholder="Senha"
               size="large"
+              style={{ width: '100%', marginTop: '-40px' }}
             />
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" block size="large" loading={loading}>
               Entrar
-            </Button>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="link" block onClick={() => navigate('/register')}>
-              Não tem uma conta? Cadastre-se
             </Button>
           </Form.Item>
         </Form>
