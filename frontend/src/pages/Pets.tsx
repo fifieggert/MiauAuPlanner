@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Typography, Card, Modal, Form, Input, InputNumber, Select, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { animalService, Pet } from '../services/animalService';
-import { speciesService, Species } from '../services/speciesService';
+import { getAllSpecies, getSpeciesName } from '../utils/speciesUtils';
 import { userService, Usuario } from '../services/userService';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -12,12 +12,14 @@ const { Option } = Select;
 const Pets: React.FC = () => {
   const { user } = useAuth();
   const [pets, setPets] = useState<Pet[]>([]);
-  const [species, setSpecies] = useState<Species[]>([]);
   const [users, setUsers] = useState<Usuario[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingPet, setEditingPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Get species from utility function
+  const species = getAllSpecies();
 
   const fetchPets = async () => {
     try {
@@ -33,15 +35,6 @@ const Pets: React.FC = () => {
     }
   };
 
-  const fetchSpecies = async () => {
-    try {
-      const data = await speciesService.getAll();
-      setSpecies(data);
-    } catch (error) {
-      message.error('Erro ao carregar espécies');
-    }
-  };
-
   const fetchUsers = async () => {
     try {
       const data = await userService.findAll();
@@ -53,7 +46,6 @@ const Pets: React.FC = () => {
 
   useEffect(() => {
     fetchPets();
-    fetchSpecies();
     fetchUsers();
   }, []);
 
@@ -104,11 +96,6 @@ const Pets: React.FC = () => {
     } catch (error) {
       message.error('Erro ao salvar pet');
     }
-  };
-
-  const getSpeciesName = (speciesId: number) => {
-    const speciesObj = species.find(s => s.ID_especie === speciesId);
-    return speciesObj ? speciesObj.especie : 'Espécie não encontrada';
   };
 
   const getUserName = (userId: number) => {

@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
         setPets(userPets);
 
         // Filtrar compromissos que pertencem aos pets do usuário
-        const userPetIds = userPets.map(pet => pet.id);
+        const userPetIds = userPets.map((pet: Pet) => pet.id);
         const userAppointments = appointmentsData.filter(
           (appointment: Compromisso) => userPetIds.includes(appointment.ID_animal)
         );

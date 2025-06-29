@@ -2,7 +2,6 @@ import express from 'express'
 
 import userRouter from './routes/usuarioRoutes'
 import animalRouter from './routes/animalRoutes'
-import especieRouter from './routes/especieRoutes'
 import alergiaRouter from './routes/alergiaRoutes'
 import historicoRouter from './routes/historicoRoutes'
 import compromissosRouter from './routes/compromissosRoutes'
@@ -20,7 +19,6 @@ app.use(express.json());
 // Configurando todas as rotas com o prefixo /api
 app.use('/api', userRouter);
 app.use('/api', animalRouter);
-app.use('/api', especieRouter);
 app.use('/api', alergiaRouter);
 app.use('/api', historicoRouter);
 app.use('/api', compromissosRouter);

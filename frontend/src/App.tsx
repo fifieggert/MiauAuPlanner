@@ -10,7 +10,6 @@ import Dashboard from './pages/Dashboard';
 import Pets from './pages/Pets';
 import Users from './pages/Users';
 import Appointments from './pages/Appointments';
-import Species from './pages/Species';
 import AppLayout from './components/Layout';
 import 'antd/dist/reset.css';
 
@@ -60,14 +59,6 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <Appointments />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/species" 
-                element={
-                  <ProtectedRoute>
-                    <Species />
                   </ProtectedRoute>
                 } 
               />

@@ -38,7 +38,6 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = () => {
     if (path.includes('/appointments')) return '2';
     if (path.includes('/pets')) return '3';
     if (path.includes('/users')) return '4';
-    if (path.includes('/species')) return '5';
     return '1';
   };
 
@@ -62,9 +61,6 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = () => {
         navigate('/users');
         break;
       case '5':
-        navigate('/species');
-        break;
-      case '6':
         handleLogout();
         break;
       default:
@@ -77,8 +73,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = () => {
     { key: '2', icon: <CalendarOutlined />, label: 'Agendamentos' },
     { key: '3', icon: <TeamOutlined />, label: 'Pets' },
     { key: '4', icon: <UserOutlined />, label: 'Usuários' },
-    { key: '5', icon: <AppstoreOutlined />, label: 'Espécies' },
-    { key: '6', icon: <LogoutOutlined />, label: 'Sair' },
+    { key: '5', icon: <LogoutOutlined />, label: 'Sair' },
   ];
 
   return (
