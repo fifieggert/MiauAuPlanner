@@ -14,5 +14,19 @@ export const tipoCompromissoService = {
   getById: async (id: number): Promise<TipoCompromisso> => {
     const response = await api.get(`/tipos/${id}`);
     return response.data;
+  },
+
+  create: async (tipo: Omit<TipoCompromisso, 'ID_tipo'>): Promise<TipoCompromisso> => {
+    const response = await api.post('/tipos', tipo);
+    return response.data;
+  },
+
+  update: async (id: number, tipo: Partial<TipoCompromisso>): Promise<TipoCompromisso> => {
+    const response = await api.put(`/tipos/${id}`, tipo);
+    return response.data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/tipos/${id}`);
   }
 }; 

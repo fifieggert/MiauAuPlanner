@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import Pets from './pages/Pets';
 import Users from './pages/Users';
 import Appointments from './pages/Appointments';
+import TipoCompromisso from './pages/TipoCompromisso';
 import AppLayout from './components/Layout';
 import 'antd/dist/reset.css';
 
@@ -59,6 +60,14 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <Appointments />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/tipos-compromisso" 
+                element={
+                  <ProtectedRoute>
+                    <TipoCompromisso />
                   </ProtectedRoute>
                 } 
               />
